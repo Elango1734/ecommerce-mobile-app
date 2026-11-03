@@ -1,0 +1,90 @@
+# Resolve react_native_pods.rb with node to allow for hoisting
+require Pod::Executable.execute_command('node', ['-p',
+  'require.resolve(
+    "react-native/scripts/react_native_pods.rb",
+    {paths: [process.argv[1]]},
+  )', __dir__]).strip
+
+platform :ios, min_ios_version_supported
+prepare_react_native_project!
+
+linkage = ENV['USE_FRAMEWORKS']
+if linkage != nil
+  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+  use_frameworks! :linkage => linkage.to_sym
+end
+
+target 'ShopSphereMobile' do
+  config = use_native_modules!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # An absolute path to your application root.
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+  post_install do |installer|
+    # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
+    react_native_post_install(
+      installer,
+      config[:reactNativePath],
+      :mac_catalyst_enabled => false,
+      # :ccache_enabled => true
+    )
+
+    # This project's directory name has spaces in it ("untitled folder"),
+    # which several of RN's own bundled build scripts don't quote paths
+    # against. Patched here (not just by hand in node_modules/Pods) so the
+    # fix survives a fresh `npm install` / `pod install`.
+
+    # Several RN-generated build phases run
+    # `/bin/sh -c "$SOME_VAR $OTHER_VAR"` where both vars hold absolute
+    # paths — the unquoted interpolation inside the already-quoted `-c`
+    # string gets word-split by the inner shell ("No such file or
+    # directory" on the path fragment up to the first space). Call the
+    # script directly instead, in both the Pods project (e.g. ReactCodegen's
+    # "Generate Specs" phase) and the app's own project (e.g. "Bundle React
+    # Native code and images").
+    unquoted_sh_c = /\/bin\/sh -c "(\$\w+) (\$\w+)"/
+    [installer.pods_project, Xcodeproj::Project.open(File.join(__dir__, 'ShopSphereMobile.xcodeproj'))].each do |project|
+      changed = false
+      project.targets.each do |target|
+        target.shell_script_build_phases.each do |phase|
+          next unless phase.shell_script&.match?(unquoted_sh_c)
+          phase.shell_script = phase.shell_script.gsub(unquoted_sh_c, '"\1" "\2"')
+          changed = true
+        end
+      end
+      project.save if changed
+    end
+
+    # with-environment.sh (which the phase above calls) has the same bug one
+    # level deeper: it executes its argument as `$1` unquoted.
+    with_environment_script = File.join(config[:reactNativePath], 'scripts/xcode/with-environment.sh')
+    if File.exist?(with_environment_script)
+      contents = File.read(with_environment_script)
+      needle = "if [ -n \"$1\" ]; then\n  $1"
+      if contents.include?(needle)
+        File.write(with_environment_script, contents.sub(needle, "if [ -n \"$1\" ]; then\n  \"$1\""))
+      end
+    end
+
+    # RN 0.79's vendored `fmt` pod (11.0.2) uses FMT_CONSTEVAL format-string
+    # checks that newer Xcode/Clang reject ("call to consteval function ...
+    # is not a constant expression"). fmt/base.h computes FMT_USE_CONSTEVAL
+    # with an unconditional `#define` (no `#ifndef` guard), so a
+    # GCC_PREPROCESSOR_DEFINITIONS override is silently clobbered — the
+    # header itself has to be patched to force the flag off.
+    fmt_header = File.join(__dir__, 'Pods/fmt/include/fmt/base.h')
+    if File.exist?(fmt_header)
+      contents = File.read(fmt_header)
+      needle = '#if !defined(__cpp_lib_is_constant_evaluated)'
+      if contents.include?(needle) && !contents.include?('FMT_USE_CONSTEVAL force-disabled')
+        patched = contents.sub(needle, "#if 1 // FMT_USE_CONSTEVAL force-disabled: broken under this Xcode/Clang")
+        File.chmod(0644, fmt_header) # CocoaPods installs vendored headers read-only
+        File.write(fmt_header, patched)
+        File.chmod(0444, fmt_header)
+      end
+    end
+  end
+end

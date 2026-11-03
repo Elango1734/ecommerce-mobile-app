@@ -1,22 +1,33 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
-
 # dependencies
 node_modules/
 
-# Expo
-.expo/
-dist/
-web-build/
-expo-env.d.ts
+# Xcode build artifacts (ios/ and android/ themselves are tracked — bare RN, not CNG-generated)
+ios/build/
+ios/Pods/
+ios/*.xcuserstate
+ios/**/*.xcuserdata
+ios/**/xcuserdata
+ios/DerivedData/
+ios/**/*.hmap
+ios/**/*.ipa
+ios/**/.xcode.env.local
 
-# Native
+# Android build artifacts
+android/app/build/
+android/build/
+android/.gradle/
+android/.idea/
+android/local.properties
+android/*.iml
+android/*.hprof
+android/**/.cxx/
+android/**/*.keystore
+!android/app/debug.keystore
 .kotlin/
-*.orig.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
+
+# Expo leftovers (migrated to bare RN CLI; this is local tooling state)
+.expo/
+expo-env.d.ts
 
 # Metro
 .metro-health-check*
@@ -36,6 +47,5 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-# generated native folders
-/ios
-/android
+# testing
+coverage/

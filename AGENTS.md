@@ -1,41 +1,37 @@
-This is an Expo/React Native mobile application. Prioritize mobile-first patterns, performance, and cross-platform compatibility.
-
-## Expo has changed — do not trust your training data
-
-Expo ships breaking changes every SDK release. APIs you remember are likely renamed, moved, or removed. Before writing any code that touches an Expo, EAS, or React Native API:
-
-1. Read the major version of the `expo` package in `package.json`.
-2. Fetch the matching versioned docs: `https://docs.expo.dev/versions/v<major>.0.0/`
-3. For anything else, fetch https://docs.expo.dev/llms.txt — an index of all Expo docs with corrections to common LLM misconceptions. Follow its links to the specific page you need; never answer from memory.
+This is a bare React Native CLI mobile application (migrated off Expo). Prioritize mobile-first patterns, performance, and cross-platform compatibility.
 
 ## Commands
 
-Use `bunx` instead of `npx` if the project uses bun (`bun.lock` present).
-
 ```bash
-npx expo install <package>  # ALWAYS use instead of npm/yarn/pnpm/bun add — resolves SDK-compatible versions
-npx expo start              # start the dev server
-npx expo lint               # lint
-npx tsc --noEmit            # typecheck
-npx expo-doctor             # diagnose dependency and config issues
-npx expo install --fix      # fix incompatible package versions
+npm start              # start the Metro dev server
+npm run ios            # build and run on iOS Simulator
+npm run android        # build and run on Android emulator
+npm run pod-install    # cd ios && bundle exec pod install (after adding a package with native iOS code)
+npm run typecheck      # tsc --noEmit
+npm run lint           # eslint .
+npm test               # jest
 ```
 
 Run lint and typecheck before declaring any task done.
 
 ## Navigation & Routing
 
-- Use **Expo Router** for all navigation. Routes live in `src/app/` — every file there is a screen, `_layout.tsx` files define navigators. Keep non-route code (components, hooks, utils) outside `src/app/`.
-- Import `Link`, `router`, and `useLocalSearchParams` from `expo-router`.
-- Docs: https://docs.expo.dev/router/introduction.md
+- Uses **React Navigation** (`@react-navigation/native` + `native-stack` + `bottom-tabs`), not Expo Router — there is no `src/app/` file-based routing.
+- `src/navigation/types.ts` defines `RootStackParamList` and `TabParamList`, merged into one `AppParamList` and registered via the `ReactNavigation.RootParamList` global augmentation — this is what makes `useNavigation()`/`useRoute()` fully typed everywhere with no per-screen generics needed.
+- `src/navigation/RootNavigator.tsx` is the root `NativeStack` (mirrors the old Expo Router root `_layout.tsx`: same screens, same modal presentations, same header options). `src/navigation/TabNavigator.tsx` is the bottom tab navigator nested under it as the `Tabs` screen.
+- Screens live in `src/screens/` (e.g. `HomeScreen.tsx`, `ProductDetailScreen.tsx`), not `src/app/`. Each screen that needs route params reads them via `useRoute<RouteProp<AppParamList, 'ScreenName'>>()`; navigation calls use `useNavigation().navigate('ScreenName', params)` — this works for both sibling tab screens and root-stack screens, since React Navigation automatically delegates a `navigate()` call to the nearest ancestor navigator that owns a matching screen name.
+- Entry point: `index.js` → `src/App.tsx` (sets up `GestureHandlerRootView` → `SafeAreaProvider` → `QueryClientProvider` → `ThemeProvider` → `NavigationContainer` → `RootNavigator`, gated on auth/guest-store hydration).
 
-## Building with EAS
+## Native modules (bare RN, no Expo Go)
 
-Use EAS to build, sign, and submit the app in the cloud (`eas build`, `eas submit`) and to ship over-the-air updates (`eas update`) — no local Xcode or Android Studio required. Run EAS CLI as `bunx eas-cli <command>` in Bun projects, or `npx eas-cli@latest <command>` otherwise; substitute that for bare `eas` in docs examples.
-Docs: https://docs.expo.dev/eas/index.md
+- Keychain/Keystore storage: `react-native-keychain` (not `expo-secure-store`).
+- UUIDs: `uuid` + `react-native-get-random-values` (imported once at the very top of `src/App.tsx` for the crypto polyfill) — not `expo-crypto`.
+- Images: React Native's built-in `Image` (`resizeMode` prop, not `contentFit`) — not `expo-image`.
+- Config constants: `src/config/appConfig.ts` — not `expo-constants`.
 
-## Rules
+## iOS build notes
 
-- If `ios/` and `android/` directories do not exist, they are generated (Continuous Native Generation). Never create or edit them by hand — configure native behavior in `app.json` and config plugins.
-- Expo Go only includes its bundled native modules. After adding a library with native code, the app needs a development build: `npx expo run:ios|android` locally, or `eas build --profile development`.
-- Prefer recommended Expo modules over third-party libraries, and check your available skills before adding dependencies. Docs: https://docs.expo.dev/versions/latest/index.md
+- This project's absolute path contains spaces, which breaks several of React Native's own bundled build scripts (unquoted `$VAR1 $VAR2` interpolations that word-split). `ios/Podfile`'s `post_install` hook patches the generated Xcode script-phases (both the Pods project and the app's own project) and a vendored `node_modules/react-native/scripts/xcode/with-environment.sh` fix on every `pod install` — if a *new* RN-bundled script phase ever breaks the same way after an RN upgrade, add another targeted patch there rather than renaming the project directory.
+- The vendored `fmt` CocoaPod (11.0.2, pulled in transitively by RN 0.79) uses a `consteval` format-string check that this machine's Xcode/Clang rejects at compile time. The same `post_install` hook patches `Pods/fmt/include/fmt/base.h` to force `FMT_USE_CONSTEVAL` off after every `pod install`.
+- First-time setup needs `bundle install` then `bundle exec pod install --project-directory=ios` (from `apps/mobile`) before `npm run ios`/Xcode will build.
+- `react-native-svg` is pinned to an exact `15.11.2` (no caret) on purpose. 15.16 — what `@15`/`^15.11.2` resolves to — fails RN 0.79's codegen during `pod install` with `[Codegen] Error: Unknown prop type for "minX": "undefined"`, so `pod install` exits 1 and no pods are written. Keep the exact pin until RN itself is upgraded.
