@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text as RNText, View as RNView, type TextProps, type ViewProps } from 'react-native';
+import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 
 export type TextVariant = 'display' | 'title' | 'heading' | 'body' | 'bodySmall' | 'caption' | 'label';
@@ -41,7 +42,10 @@ export function ThemedText({ variant = 'body', color = 'primary', weight, style,
         {
           color: colorMap[color],
           fontSize: VARIANT_SIZES[variant],
-          fontWeight: typography.fontWeight[weight ?? defaultWeight],
+          // Urbanist ships each weight as its own family, so the face is
+          // selected by PostScript name; setting fontWeight as well would
+          // make iOS synthesise a second, heavier weight on top.
+          fontFamily: fontFamilies[weight ?? defaultWeight],
           lineHeight: VARIANT_SIZES[variant] * typography.lineHeight.normal
         },
         style

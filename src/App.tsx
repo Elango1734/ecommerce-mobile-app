@@ -5,6 +5,7 @@ import { StatusBar } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { fontFamilies } from '@shopsphere/config';
 import { NavigationContainer } from '@react-navigation/native';
 import { queryClient } from '@/api/queryClient';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
@@ -32,10 +33,10 @@ function NavigationRoot() {
             notification: colors.accent,
           },
           fonts: {
-            regular: { fontFamily: 'System', fontWeight: '400' },
-            medium: { fontFamily: 'System', fontWeight: '500' },
-            bold: { fontFamily: 'System', fontWeight: '700' },
-            heavy: { fontFamily: 'System', fontWeight: '800' }
+            regular: { fontFamily: fontFamilies.regular, fontWeight: '400' },
+            medium: { fontFamily: fontFamilies.medium, fontWeight: '500' },
+            bold: { fontFamily: fontFamilies.bold, fontWeight: '700' },
+            heavy: { fontFamily: fontFamilies.black, fontWeight: '900' }
           }
         }}
       >
