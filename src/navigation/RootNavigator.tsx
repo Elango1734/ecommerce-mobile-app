@@ -16,6 +16,13 @@ import WishlistScreen from '@/screens/WishlistScreen';
 import RecentlyViewedScreen from '@/screens/RecentlyViewedScreen';
 import SettingsScreen from '@/screens/SettingsScreen';
 import NewReturnScreen from '@/screens/NewReturnScreen';
+import WalkthroughScreen from '@/screens/evira/WalkthroughScreen';
+import LetsYouInScreen from '@/screens/evira/LetsYouInScreen';
+import ForgotPasswordScreen from '@/screens/evira/ForgotPasswordScreen';
+import VerifyOtpScreen from '@/screens/evira/VerifyOtpScreen';
+import CreateNewPasswordScreen from '@/screens/evira/CreateNewPasswordScreen';
+import CreatePinScreen from '@/screens/evira/CreatePinScreen';
+import SetFingerprintScreen from '@/screens/evira/SetFingerprintScreen';
 import type { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -33,6 +40,16 @@ export function RootNavigator() {
       }}
     >
       <Stack.Screen name="Tabs" component={TabNavigator} />
+
+      {/* Evira onboarding + auth flow. These carry their own in-screen
+          headers (EviraHeader), so the stack header stays hidden. */}
+      <Stack.Screen name="Walkthrough" component={WalkthroughScreen} />
+      <Stack.Screen name="LetsYouIn" component={LetsYouInScreen} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+      <Stack.Screen name="VerifyOtp" component={VerifyOtpScreen} />
+      <Stack.Screen name="CreateNewPassword" component={CreateNewPasswordScreen} />
+      <Stack.Screen name="CreatePin" component={CreatePinScreen} />
+      <Stack.Screen name="SetFingerprint" component={SetFingerprintScreen} />
       <Stack.Screen name="Login" component={LoginScreen} options={{ presentation: 'modal', headerShown: true, title: 'Sign in' }} />
       <Stack.Screen name="Register" component={RegisterScreen} options={{ presentation: 'modal', headerShown: true, title: 'Create account' }} />
       <Stack.Screen name="ProductDetail" component={ProductDetailScreen} options={{ headerShown: true, title: '' }} />

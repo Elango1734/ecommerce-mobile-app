@@ -7,6 +7,18 @@ export type TabParamList = {
 
 export type RootStackParamList = {
   Tabs: undefined;
+
+  /* --- Evira onboarding + auth flow (kit screens 3-5, 11, 20-21, 23-26).
+     Routes are added here only once their screen is registered in
+     RootNavigator, so the param list never advertises a route that would
+     crash on navigate. --- */
+  Walkthrough: undefined;
+  LetsYouIn: undefined;
+  CreatePin: { intent: 'setup' | 'checkout' | 'topup' };
+  SetFingerprint: undefined;
+  ForgotPassword: undefined;
+  VerifyOtp: { method: 'sms' | 'email'; destination: string };
+  CreateNewPassword: undefined;
   Login: undefined;
   Register: undefined;
   ProductDetail: { slug: string };

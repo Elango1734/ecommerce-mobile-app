@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
-import { FlatList, Pressable, TextInput, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
-import { ThemedText, ThemedView } from '@/components/ui/Themed';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
+import { ThemedText } from '@/components/ui/Themed';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
+import { EviraButton, EviraHeader } from '@/components/evira';
+import { ChevronRightGlyph, MessageGlyph } from '@/components/ui/icons';
 import { useCreateTicket, useSupportTickets } from '@/hooks/useSupport';
 import { useIsAuthenticated } from '@/stores/authStore';
 import { ApiClientError } from '@shopsphere/api-client';
 
+/** Kit screens 93-95 (help center / contact CS). */
 export default function SupportScreen() {
   const navigation = useNavigation();
-  const { colors, spacing, radii } = useTheme();
+  const { colors } = useTheme();
   const isAuthenticated = useIsAuthenticated();
   const { data, isLoading, isError, error, refetch } = useSupportTickets();
   const createTicket = useCreateTicket();
@@ -24,9 +27,9 @@ export default function SupportScreen() {
 
   if (!isAuthenticated) {
     return (
-      <ThemedView style={{ flex: 1 }}>
+      <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
         <EmptyState title="Sign in for support" actionLabel="Sign in" onAction={() => navigation.navigate('Login')} />
-      </ThemedView>
+      </SafeAreaView>
     );
   }
   if (isLoading) return <LoadingState label="Loading tickets…" />;
@@ -45,22 +48,21 @@ export default function SupportScreen() {
   };
 
   return (
-    <ThemedView style={{ flex: 1 }}>
+    <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
+      <EviraHeader title="Help Center" />
       <FlatList
         data={data?.data ?? []}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: spacing[4], gap: spacing[3] }}
+        contentContainerStyle={styles.listContent}
         ListHeaderComponent={
-          <Card style={{ marginBottom: spacing[4] }}>
-            <ThemedText variant="heading" style={{ marginBottom: spacing[2] }}>
-              New ticket
-            </ThemedText>
+          <View style={[styles.newCard, { backgroundColor: colors.surfaceSunken }]}>
+            <ThemedText style={[styles.sectionTitle, { color: colors.textPrimary }]}>New ticket</ThemedText>
             <TextInput
               value={subject}
               onChangeText={setSubject}
               placeholder="Subject"
               placeholderTextColor={colors.textMuted}
-              style={{ borderWidth: 1, borderColor: colors.border, borderRadius: radii.md, padding: spacing[3], color: colors.textPrimary, marginBottom: spacing[2] }}
+              style={[styles.input, { backgroundColor: colors.surface, color: colors.textPrimary }]}
             />
             <TextInput
               value={message}
@@ -68,28 +70,42 @@ export default function SupportScreen() {
               placeholder="How can we help?"
               placeholderTextColor={colors.textMuted}
               multiline
-              style={{ borderWidth: 1, borderColor: colors.border, borderRadius: radii.md, padding: spacing[3], color: colors.textPrimary, minHeight: 60, marginBottom: spacing[2] }}
+              style={[styles.input, styles.textarea, { backgroundColor: colors.surface, color: colors.textPrimary }]}
             />
-            {formError ? (
-              <ThemedText color="danger" variant="bodySmall" style={{ marginBottom: spacing[2] }}>
-                {formError}
-              </ThemedText>
-            ) : null}
-            <Button label="Submit" size="sm" loading={createTicket.isPending} onPress={onCreate} />
-          </Card>
+            {formError ? <ThemedText style={{ color: colors.danger, marginBottom: 10 }}>{formError}</ThemedText> : null}
+            <EviraButton label="Submit" loading={createTicket.isPending} onPress={onCreate} style={styles.submit} />
+          </View>
         }
-        ListEmptyComponent={<ThemedText color="muted">No support tickets yet.</ThemedText>}
+        ListEmptyComponent={<ThemedText style={{ fontFamily: fontFamilies.medium, color: colors.textMuted }}>No support tickets yet.</ThemedText>}
         renderItem={({ item }) => (
-          <Pressable onPress={() => navigation.navigate('SupportTicket', { ticketId: item.id })}>
-            <Card>
-              <ThemedText weight="semibold">{item.subject}</ThemedText>
-              <View style={{ marginTop: spacing[1] }}>
+          <Pressable onPress={() => navigation.navigate('SupportTicket', { ticketId: item.id })} style={[styles.ticketRow, { backgroundColor: colors.surfaceSunken }]}>
+            <View style={[styles.ticketIcon, { backgroundColor: colors.surface }]}>
+              <MessageGlyph size={18} color={colors.textPrimary} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <ThemedText numberOfLines={1} style={{ fontFamily: fontFamilies.bold, fontSize: 15, color: colors.textPrimary }}>
+                {item.subject}
+              </ThemedText>
+              <View style={{ marginTop: 6 }}>
                 <StatusBadge status={item.status} />
               </View>
-            </Card>
+            </View>
+            <ChevronRightGlyph size={18} color={colors.textMuted} />
           </Pressable>
         )}
       />
-    </ThemedView>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  root: { flex: 1 },
+  listContent: { paddingHorizontal: 24, paddingBottom: 24, gap: 12 },
+  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: 18, marginBottom: 14 },
+  newCard: { borderRadius: 20, padding: 20, marginBottom: 12 },
+  input: { borderRadius: 14, padding: 14, fontFamily: fontFamilies.medium, fontSize: 14, marginBottom: 12 },
+  textarea: { minHeight: 70, textAlignVertical: 'top' },
+  submit: { height: 48 },
+  ticketRow: { flexDirection: 'row', alignItems: 'center', gap: 14, borderRadius: 16, padding: 14 },
+  ticketIcon: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' }
+});

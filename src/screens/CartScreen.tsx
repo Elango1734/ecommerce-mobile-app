@@ -1,22 +1,22 @@
 import React, { useRef } from 'react';
-import { Animated, FlatList, View } from 'react-native';
+import { Animated, FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
-import { ThemedText, ThemedView } from '@/components/ui/Themed';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
+import { ThemedText } from '@/components/ui/Themed';
 import { QuantityStepper } from '@/components/ui/QuantityStepper';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
-import { FadeSlideIn } from '@/components/ui/FadeSlideIn';
 import { ProductImage } from '@/components/ProductImage';
+import { EviraButton, EviraHeader } from '@/components/evira';
+import { TrashGlyph } from '@/components/ui/icons';
 import { useCart, useRemoveCartItem, useUpdateCartItem } from '@/hooks/useCart';
 import { useIsAuthenticated } from '@/stores/authStore';
 import { formatMoney } from '@/utils/money';
 import type { CartItemDto } from '@shopsphere/api-client';
 
-function CartRow({ item, index, onRemove }: { item: CartItemDto; index: number; onRemove: () => void }) {
-  const { spacing } = useTheme();
+function CartRow({ item, onRemove }: { item: CartItemDto; onRemove: () => void }) {
+  const { colors } = useTheme();
   const updateItem = useUpdateCartItem();
   const collapse = useRef(new Animated.Value(1)).current;
 
@@ -34,30 +34,29 @@ function CartRow({ item, index, onRemove }: { item: CartItemDto; index: number; 
         maxHeight: collapse.interpolate({ inputRange: [0, 1], outputRange: [0, 200] })
       }}
     >
-      <FadeSlideIn delay={Math.min(index, 8) * 40} style={{ marginBottom: spacing[3] }}>
-        <Card elevated="sm" style={{ flexDirection: 'row', gap: spacing[3] }}>
-          <View style={{ width: 64, height: 64, borderRadius: 8, overflow: 'hidden' }}>
-            <ProductImage altText="Cart item" />
+      <View style={styles.row}>
+        <View style={[styles.thumb, { backgroundColor: colors.surfaceSunken }]}>
+          <ProductImage altText="Cart item" />
+        </View>
+        <View style={styles.rowBody}>
+          <ThemedText style={[styles.rowPrice, { color: colors.textPrimary }]}>{formatMoney(item.indicativeUnitPrice)}</ThemedText>
+          <ThemedText style={[styles.rowEach, { color: colors.textMuted }]}>per item</ThemedText>
+          <View style={styles.rowFooter}>
+            <QuantityStepper quantity={item.quantity} onChange={(next) => updateItem.mutate({ variantId: item.variantId, quantity: next })} />
+            <Pressable accessibilityRole="button" accessibilityLabel="Remove item" hitSlop={10} onPress={handleRemove}>
+              <TrashGlyph size={20} color={colors.textMuted} />
+            </Pressable>
           </View>
-          <View style={{ flex: 1, justifyContent: 'space-between' }}>
-            <ThemedText variant="bodySmall" weight="medium">
-              {formatMoney(item.indicativeUnitPrice)} each
-            </ThemedText>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: spacing[2] }}>
-              <QuantityStepper quantity={item.quantity} onChange={(next) => updateItem.mutate({ variantId: item.variantId, quantity: next })} />
-              <Button label="Remove" variant="ghost" size="sm" onPress={handleRemove} />
-            </View>
-          </View>
-        </Card>
-      </FadeSlideIn>
+        </View>
+      </View>
     </Animated.View>
   );
 }
 
+/** Kit screen 55. */
 export default function CartScreen() {
   const navigation = useNavigation();
-  const insets = useSafeAreaInsets();
-  const { spacing } = useTheme();
+  const { colors } = useTheme();
   const isAuthenticated = useIsAuthenticated();
   const { data: cart, isLoading, isError, error, refetch } = useCart();
   const removeItem = useRemoveCartItem();
@@ -71,31 +70,47 @@ export default function CartScreen() {
   const subtotalMinor = cart.items.reduce((sum, item) => sum + item.indicativeUnitPrice.amountMinor * item.quantity, 0);
 
   return (
-    <ThemedView style={{ flex: 1, paddingTop: insets.top }}>
+    <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top', 'bottom']}>
+      <EviraHeader title={`My Cart (${cart.items.length})`} />
       <FlatList
         data={cart.items}
         keyExtractor={(item) => item.variantId}
-        contentContainerStyle={{ padding: spacing[4] }}
-        renderItem={({ item, index }: { item: CartItemDto; index: number }) => (
-          <CartRow item={item} index={index} onRemove={() => removeItem.mutate(item.variantId)} />
-        )}
+        contentContainerStyle={styles.listContent}
+        renderItem={({ item }) => <CartRow item={item} onRemove={() => removeItem.mutate(item.variantId)} />}
         ListFooterComponent={
-          <FadeSlideIn delay={120} style={{ marginTop: spacing[4] }}>
-            <ThemedText color="muted" variant="bodySmall" style={{ marginBottom: spacing[2] }}>
+          <View style={styles.summary}>
+            <ThemedText style={[styles.note, { color: colors.textMuted }]}>
               Prices shown are indicative — the exact total, including tax and shipping, is calculated at checkout.
             </ThemedText>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: spacing[4] }}>
-              <ThemedText variant="heading">Estimated subtotal</ThemedText>
-              <ThemedText variant="heading">{formatMoney({ amountMinor: subtotalMinor, currency: cart.currency })}</ThemedText>
+            <View style={styles.totalRow}>
+              <ThemedText style={[styles.totalLabel, { color: colors.textSecondary }]}>Estimated subtotal</ThemedText>
+              <ThemedText style={[styles.totalValue, { color: colors.textPrimary }]}>
+                {formatMoney({ amountMinor: subtotalMinor, currency: cart.currency })}
+              </ThemedText>
             </View>
-            <Button
-              label={isAuthenticated ? 'Proceed to checkout' : 'Sign in to checkout'}
-              fullWidth
+            <EviraButton
+              label={isAuthenticated ? 'Proceed to Checkout' : 'Sign in to checkout'}
               onPress={() => navigation.navigate(isAuthenticated ? 'Checkout' : 'Login')}
             />
-          </FadeSlideIn>
+          </View>
         }
       />
-    </ThemedView>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  root: { flex: 1 },
+  listContent: { paddingHorizontal: 24, paddingTop: 8, paddingBottom: 24 },
+  row: { flexDirection: 'row', gap: 16, marginBottom: 20 },
+  thumb: { width: 88, height: 88, borderRadius: 16, overflow: 'hidden' },
+  rowBody: { flex: 1, justifyContent: 'center' },
+  rowPrice: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 22 },
+  rowEach: { fontFamily: fontFamilies.medium, fontSize: 13, marginTop: 2 },
+  rowFooter: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 },
+  summary: { marginTop: 8 },
+  note: { fontFamily: fontFamilies.medium, fontSize: 13, lineHeight: 18, marginBottom: 16 },
+  totalRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
+  totalLabel: { fontFamily: fontFamilies.semibold, fontSize: 16 },
+  totalValue: { fontFamily: fontFamilies.black, fontSize: 20 }
+});
