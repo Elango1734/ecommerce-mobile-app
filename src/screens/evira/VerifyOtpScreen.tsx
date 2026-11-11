@@ -4,7 +4,7 @@ import { useNavigation, useRoute, type RouteProp } from '@react-navigation/nativ
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
-import { EviraButton, EviraHeader } from '@/components/evira';
+import { EviraButton, EviraHeader, Illustration } from '@/components/evira';
 import type { AppParamList } from '@/navigation/types';
 
 const LENGTH = 4;
@@ -45,6 +45,9 @@ export default function VerifyOtpScreen() {
     <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top', 'bottom']}>
       <EviraHeader title="Forgot Password" />
       <View style={styles.body}>
+        <View style={styles.illustrationWrap}>
+          <Illustration name="verified" size={180} />
+        </View>
         <Text style={[styles.lead, { color: colors.textPrimary }]}>
           Code has been sent to {params.destination}
         </Text>
@@ -102,7 +105,8 @@ export default function VerifyOtpScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
-  body: { flex: 1, paddingHorizontal: 24, paddingTop: 24 },
+  body: { flex: 1, paddingHorizontal: 24, paddingTop: 16 },
+  illustrationWrap: { alignItems: 'center', marginBottom: 16 },
   lead: { fontFamily: fontFamilies.medium, fontSize: 18, lineHeight: 25, textAlign: 'center' },
   row: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 40 },
   box: {

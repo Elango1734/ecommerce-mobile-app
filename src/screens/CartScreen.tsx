@@ -64,7 +64,7 @@ export default function CartScreen() {
   if (isLoading) return <LoadingState label="Loading your cart…" />;
   if (isError) return <ErrorState message={(error as Error).message} onRetry={() => refetch()} />;
   if (!cart || cart.items.length === 0) {
-    return <EmptyState title="Your cart is empty" message="Browse the catalog to find something you'll love." actionLabel="Browse products" onAction={() => navigation.navigate('Search')} />;
+    return <EmptyState illustration="emptyCart" title="Your cart is empty" message="Browse the catalog to find something you'll love." actionLabel="Browse products" onAction={() => navigation.navigate('Search')} />;
   }
 
   const subtotalMinor = cart.items.reduce((sum, item) => sum + item.indicativeUnitPrice.amountMinor * item.quantity, 0);

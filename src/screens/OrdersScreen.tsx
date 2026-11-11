@@ -35,7 +35,7 @@ export default function OrdersScreen() {
   if (!isAuthenticated) {
     return (
       <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
-        <EmptyState title="Sign in to see your orders" actionLabel="Sign in" onAction={() => navigation.navigate('Login')} />
+        <EmptyState illustration="login" title="Sign in to see your orders" actionLabel="Sign in" onAction={() => navigation.navigate('Login')} />
       </SafeAreaView>
     );
   }
@@ -64,6 +64,7 @@ export default function OrdersScreen() {
 
       {list.length === 0 ? (
         <EmptyState
+          illustration="empty"
           title={tab === 'ongoing' ? 'No ongoing orders' : 'No completed orders'}
           message="Your order history will show up here."
           actionLabel="Start shopping"

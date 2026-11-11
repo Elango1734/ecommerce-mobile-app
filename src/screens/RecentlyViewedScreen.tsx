@@ -20,7 +20,7 @@ export default function RecentlyViewedScreen() {
     return (
       <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
         <EviraHeader title="Recently Viewed" />
-        <EmptyState title="Nothing viewed yet" message="Products you look at will show up here." />
+        <EmptyState illustration="empty" title="Nothing viewed yet" message="Products you look at will show up here." />
       </SafeAreaView>
     );
   }

@@ -4,9 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
-import { EviraButton, EviraHeader } from '@/components/evira';
+import { EviraButton, EviraHeader, Illustration } from '@/components/evira';
 import { EviraSuccessDialog } from './EviraSuccessScreen';
-import { FingerprintGlyph } from '@/components/ui/icons';
 
 /** Kit screen 21. */
 export default function SetFingerprintScreen() {
@@ -21,8 +20,8 @@ export default function SetFingerprintScreen() {
         <Text style={[styles.lead, { color: colors.textSecondary }]}>
           Add a fingerprint to make your account more secure.
         </Text>
-        <View style={[styles.art, { backgroundColor: colors.surfaceSunken }]}>
-          <FingerprintGlyph size={140} color={colors.accent} strokeWidth={1.2} />
+        <View style={styles.art}>
+          <Illustration name="biometricLogin" size={240} />
         </View>
         <Text style={[styles.hint, { color: colors.textSecondary }]}>
           Please put your finger on the fingerprint scanner to get started.
@@ -52,7 +51,7 @@ const styles = StyleSheet.create({
   root: { flex: 1 },
   body: { flex: 1, paddingHorizontal: 24, alignItems: 'center' },
   lead: { fontFamily: fontFamilies.medium, fontSize: 18, lineHeight: 25, textAlign: 'center', marginTop: 24 },
-  art: { width: 240, height: 240, borderRadius: 120, alignItems: 'center', justifyContent: 'center', marginTop: 40 },
+  art: { alignItems: 'center', marginTop: 40 },
   hint: { fontFamily: fontFamilies.medium, fontSize: 16, lineHeight: 22, textAlign: 'center', marginTop: 40 },
   footer: { flexDirection: 'row', gap: 16, paddingHorizontal: 24, paddingBottom: 12 },
   half: { flex: 1 }

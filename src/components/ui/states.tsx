@@ -5,6 +5,7 @@ import { ThemedText, ThemedView } from './Themed';
 import { Button } from './Button';
 import { FadeSlideIn } from './FadeSlideIn';
 import { ProductGridSkeleton } from './Skeleton';
+import { Illustration, type IllustrationName } from '@/components/evira';
 
 export function LoadingState({ label = 'Loading…', variant = 'spinner' }: { label?: string; variant?: 'spinner' | 'grid' }) {
   const { colors, spacing } = useTheme();
@@ -38,11 +39,24 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry?: ()
   );
 }
 
-export function EmptyState({ title, message, actionLabel, onAction }: { title: string; message?: string; actionLabel?: string; onAction?: () => void }) {
+export function EmptyState({
+  title,
+  message,
+  actionLabel,
+  onAction,
+  illustration
+}: {
+  title: string;
+  message?: string;
+  actionLabel?: string;
+  onAction?: () => void;
+  illustration?: IllustrationName;
+}) {
   const { spacing } = useTheme();
   return (
     <FadeSlideIn style={{ flex: 1 }}>
       <ThemedView style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing[3], padding: spacing[6] }}>
+        {illustration ? <Illustration name={illustration} size={180} /> : null}
         <ThemedText variant="heading">{title}</ThemedText>
         {message ? (
           <ThemedText color="muted" style={{ textAlign: 'center' }}>

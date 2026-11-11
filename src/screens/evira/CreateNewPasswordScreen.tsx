@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
-import { EviraButton, EviraField, EviraHeader } from '@/components/evira';
+import { EviraButton, EviraField, EviraHeader, Illustration } from '@/components/evira';
 import { EviraSuccessDialog } from './EviraSuccessScreen';
 import { CheckGlyph, EyeGlyph, EyeOffGlyph, LockGlyph } from '@/components/ui/icons';
 
@@ -24,7 +24,7 @@ export default function CreateNewPasswordScreen() {
     <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top', 'bottom']}>
       <EviraHeader title="Create New Password" />
       <View style={styles.body}>
-        <View style={[styles.art, { backgroundColor: colors.surfaceSunken }]} />
+        <Illustration name="securePassword" size={220} />
         <Text style={[styles.lead, { color: colors.textPrimary }]}>Create Your New Password</Text>
 
         <View style={styles.fields}>
@@ -94,7 +94,6 @@ export default function CreateNewPasswordScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   body: { flex: 1, paddingHorizontal: 24 },
-  art: { width: 220, height: 220, borderRadius: 110, alignSelf: 'center', marginTop: 16 },
   lead: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 22, marginTop: 24 },
   fields: { gap: 20, marginTop: 20 },
   remember: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 24 },

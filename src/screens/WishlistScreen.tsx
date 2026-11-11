@@ -19,7 +19,7 @@ export default function WishlistScreen() {
   if (!isAuthenticated) {
     return (
       <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
-        <EmptyState title="Sign in to save favorites" actionLabel="Sign in" onAction={() => navigation.navigate('Login')} />
+        <EmptyState illustration="login" title="Sign in to save favorites" actionLabel="Sign in" onAction={() => navigation.navigate('Login')} />
       </SafeAreaView>
     );
   }
@@ -30,7 +30,7 @@ export default function WishlistScreen() {
   if (items.length === 0) {
     return (
       <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
-        <EmptyState title="Your wishlist is empty" actionLabel="Browse products" onAction={() => navigation.navigate('Search')} />
+        <EmptyState illustration="wishlist" title="Your wishlist is empty" actionLabel="Browse products" onAction={() => navigation.navigate('Search')} />
       </SafeAreaView>
     );
   }

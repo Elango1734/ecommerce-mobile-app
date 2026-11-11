@@ -194,3 +194,6 @@ const styles = StyleSheet.create({
   rule: { flex: 1, height: 1 },
   dividerLabel: { fontFamily: fontFamilies.semibold, fontSize: 14 }
 });
+
+export { Illustration } from './Illustration';
+export type { IllustrationName } from './Illustration';

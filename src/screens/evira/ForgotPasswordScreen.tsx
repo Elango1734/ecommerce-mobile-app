@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
-import { EviraButton, EviraHeader } from '@/components/evira';
+import { EviraButton, EviraHeader, Illustration } from '@/components/evira';
 import { MailGlyph, PhoneGlyph } from '@/components/ui/icons';
 
 /** Kit screen 23 — choose where the reset code is sent. */
@@ -22,7 +22,7 @@ export default function ForgotPasswordScreen() {
     <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top', 'bottom']}>
       <EviraHeader title="Forgot Password" />
       <View style={styles.body}>
-        <View style={[styles.art, { backgroundColor: colors.surfaceSunken }]} />
+        <Illustration name="forgotPassword" size={220} />
         <Text style={[styles.lead, { color: colors.textPrimary }]}>
           Select which contact details should we use to reset your password
         </Text>
@@ -76,7 +76,6 @@ export default function ForgotPasswordScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   body: { flex: 1, paddingHorizontal: 24 },
-  art: { width: 220, height: 220, borderRadius: 110, alignSelf: 'center', marginTop: 16 },
   lead: { fontFamily: fontFamilies.medium, fontSize: 18, lineHeight: 25, textAlign: 'center', marginTop: 24 },
   options: { gap: 20, marginTop: 32 },
   option: { flexDirection: 'row', alignItems: 'center', gap: 20, borderWidth: 2, borderRadius: 16, padding: 16 },

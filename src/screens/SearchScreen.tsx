@@ -92,7 +92,7 @@ export default function SearchScreen() {
       ) : isError ? (
         <ErrorState message={(error as Error).message} onRetry={() => refetch()} />
       ) : (data?.data.length ?? 0) === 0 ? (
-        <EmptyState title="No results found" message="Try a different search term or clear your filters." />
+        <EmptyState illustration="notFound" title="No results found" message="Try a different search term or clear your filters." />
       ) : (
         <FlatList
           data={data?.data ?? []}

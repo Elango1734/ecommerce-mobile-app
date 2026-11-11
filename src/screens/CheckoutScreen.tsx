@@ -41,7 +41,7 @@ export default function CheckoutScreen() {
   if (cart.isLoading || addresses.isLoading) return <LoadingState label="Preparing checkout…" />;
   if (cart.isError) return <ErrorState message={(cart.error as Error).message} onRetry={() => cart.refetch()} />;
   if (!cart.data || cart.data.items.length === 0) {
-    return <EmptyState title="Your cart is empty" message="Add something to your cart before checking out." />;
+    return <EmptyState illustration="emptyCart" title="Your cart is empty" message="Add something to your cart before checking out." />;
   }
   if (!addresses.data || addresses.data.length === 0) {
     return (

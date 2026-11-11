@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
-import { EviraButton, EviraDivider, EviraHeader, EviraSocialButton } from '@/components/evira';
+import { EviraButton, EviraDivider, EviraHeader, EviraSocialButton, Illustration } from '@/components/evira';
 import { BagGlyph, GlobeGlyph, UserGlyph } from '@/components/ui/icons';
 
 /** Kit screen 11. */
@@ -21,7 +21,7 @@ export default function LetsYouInScreen() {
     <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top', 'bottom']}>
       <EviraHeader />
       <View style={styles.body}>
-        <View style={[styles.art, { backgroundColor: colors.surfaceSunken }]} />
+        <Illustration name="login" size={240} />
         <Text style={[styles.title, { color: colors.textPrimary }]}>Let&rsquo;s you in</Text>
 
         <View style={styles.providers}>
@@ -64,7 +64,6 @@ export default function LetsYouInScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   body: { flex: 1, paddingHorizontal: 24 },
-  art: { width: 240, height: 240, borderRadius: 120, alignSelf: 'center', marginTop: 24 },
   title: { fontFamily: fontFamilies.black, fontSize: 40, lineHeight: 48, textAlign: 'center', marginTop: 32 },
   providers: { gap: 16, marginTop: 32 },
   cta: { marginTop: 24 },

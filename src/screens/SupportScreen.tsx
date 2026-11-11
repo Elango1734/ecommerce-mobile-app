@@ -28,7 +28,7 @@ export default function SupportScreen() {
   if (!isAuthenticated) {
     return (
       <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
-        <EmptyState title="Sign in for support" actionLabel="Sign in" onAction={() => navigation.navigate('Login')} />
+        <EmptyState illustration="login" title="Sign in for support" actionLabel="Sign in" onAction={() => navigation.navigate('Login')} />
       </SafeAreaView>
     );
   }

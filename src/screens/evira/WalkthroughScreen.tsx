@@ -4,7 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
-import { EviraButton } from '@/components/evira';
+import { EviraButton, Illustration } from '@/components/evira';
+import type { IllustrationName } from '@/components/evira/Illustration';
 
 const { width } = Dimensions.get('window');
 
@@ -13,11 +14,11 @@ const { width } = Dimensions.get('window');
  * only in illustration and headline, so they are one screen with a paged
  * list rather than three routes.
  */
-const SLIDES = [
-  { key: 'browse', title: 'We provide high\nquality products just\nfor you' },
-  { key: 'cart', title: 'Your satisfaction is\nour number one\npriority' },
-  { key: 'start', title: "Let's start a journey\nwith Elviree" }
-] as const;
+const SLIDES: Array<{ key: string; title: string; illustration: IllustrationName }> = [
+  { key: 'browse', title: 'We provide high\nquality products just\nfor you', illustration: 'onlineShopping' },
+  { key: 'cart', title: 'Your satisfaction is\nour number one\npriority', illustration: 'shoppingSpree' },
+  { key: 'start', title: "Let's start a journey\nwith Elviree", illustration: 'webShopping' }
+];
 
 export default function WalkthroughScreen() {
   const { colors } = useTheme();
@@ -58,7 +59,7 @@ export default function WalkthroughScreen() {
         getItemLayout={(_, i) => ({ length: width, offset: width * i, index: i })}
         renderItem={({ item }) => (
           <View style={[styles.slide, { width }]}>
-            <View style={[styles.art, { backgroundColor: colors.surfaceSunken }]} />
+            <Illustration name={item.illustration} size={240} />
             <Text style={[styles.title, { color: colors.textPrimary }]}>{item.title}</Text>
           </View>
         )}
@@ -90,8 +91,7 @@ const styles = StyleSheet.create({
   root: { flex: 1 },
   skipRow: { alignItems: 'flex-end', paddingHorizontal: 24, height: 48, justifyContent: 'center' },
   skip: { fontFamily: fontFamilies.bold, fontSize: 16 },
-  slide: { alignItems: 'center', paddingHorizontal: 24 },
-  art: { width: 280, height: 280, borderRadius: 140, marginTop: 24 },
+  slide: { alignItems: 'center', paddingHorizontal: 24, paddingTop: 24 },
   title: { fontFamily: fontFamilies.bold, fontSize: 32, lineHeight: 42, textAlign: 'center', marginTop: 48 },
   dots: { flexDirection: 'row', justifyContent: 'center', gap: 8, paddingVertical: 24 },
   dot: { height: 8, borderRadius: 4 },

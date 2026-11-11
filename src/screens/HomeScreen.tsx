@@ -8,6 +8,7 @@ import { ThemedText } from '@/components/ui/Themed';
 import { LoadingState, ErrorState } from '@/components/ui/states';
 import { SearchGlyph, BellGlyph, HeartGlyph, FilterGlyph, UserGlyph } from '@/components/ui/icons';
 import { EviraProductCard } from '@/components/evira/ProductCard';
+import { ProductImage } from '@/components/ProductImage';
 import { categoryIcon } from '@/components/evira/categoryIcon';
 import { useCategories, useProducts } from '@/hooks/useCatalog';
 import { useAuthStore } from '@/stores/authStore';
@@ -122,6 +123,10 @@ export default function HomeScreen() {
                       onPress={() => navigation.navigate('ProductDetail', { slug: p.slug })}
                       style={[styles.offerCard, { backgroundColor: colors.surfaceSunken }]}
                     >
+                      <View style={styles.offerImage}>
+                        <ProductImage storageKey={p.images[0]?.storageKey} altText={p.name} />
+                      </View>
+                      <View style={[styles.offerScrim, { backgroundColor: colors.surface, opacity: 0.86 }]} />
                       <ThemedText numberOfLines={2} style={[styles.offerTitle, { color: colors.textPrimary }]}>
                         {p.name}
                       </ThemedText>
@@ -223,7 +228,9 @@ const styles = StyleSheet.create({
   sectionTitle: { fontFamily: fontFamilies.bold, fontSize: 20, lineHeight: 25 },
   seeAll: { fontFamily: fontFamilies.semibold, fontSize: 14 },
   offerScroll: { gap: 16, paddingTop: 16, paddingRight: 24 },
-  offerCard: { width: 280, height: 160, borderRadius: 20, padding: 20, justifyContent: 'flex-end' },
+  offerCard: { width: 280, height: 160, borderRadius: 20, padding: 20, justifyContent: 'flex-end', overflow: 'hidden' },
+  offerImage: { ...StyleSheet.absoluteFillObject },
+  offerScrim: { ...StyleSheet.absoluteFillObject },
   offerTitle: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 22 },
   offerSub: { fontFamily: fontFamilies.medium, fontSize: 13, marginTop: 4 },
   categoryGrid: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 16, rowGap: 20 },

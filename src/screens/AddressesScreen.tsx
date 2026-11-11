@@ -23,7 +23,7 @@ export default function AddressesScreen() {
     return (
       <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
         <EviraHeader title="Addresses" />
-        <EmptyState title="No addresses yet" actionLabel="Add an address" onAction={() => navigation.navigate('AddAddress')} />
+        <EmptyState illustration="deliveryAddress" title="No addresses yet" actionLabel="Add an address" onAction={() => navigation.navigate('AddAddress')} />
       </SafeAreaView>
     );
   }
