@@ -1,16 +1,19 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
-import { ThemedText, ThemedView } from '@/components/ui/Themed';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
+import { ThemedText } from '@/components/ui/Themed';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
+import { EviraButton, EviraHeader } from '@/components/evira';
+import { MapPinGlyph, TrashGlyph } from '@/components/ui/icons';
 import { useAddresses, useDeleteAddress } from '@/hooks/useAddresses';
 
+/** Kit screen 81. */
 export default function AddressesScreen() {
   const navigation = useNavigation();
-  const { spacing } = useTheme();
+  const { colors } = useTheme();
   const { data, isLoading, isError, error, refetch } = useAddresses();
   const deleteAddress = useDeleteAddress();
 
@@ -18,33 +21,55 @@ export default function AddressesScreen() {
   if (isError) return <ErrorState message={(error as Error).message} onRetry={() => refetch()} />;
   if (!data || data.length === 0) {
     return (
-      <ThemedView style={{ flex: 1 }}>
+      <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
+        <EviraHeader title="Addresses" />
         <EmptyState title="No addresses yet" actionLabel="Add an address" onAction={() => navigation.navigate('AddAddress')} />
-      </ThemedView>
+      </SafeAreaView>
     );
   }
 
   return (
-    <ThemedView style={{ flex: 1 }}>
+    <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
+      <EviraHeader title="Addresses" />
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: spacing[4], gap: spacing[3] }}
+        contentContainerStyle={styles.listContent}
         renderItem={({ item }) => (
-          <Card>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <ThemedText weight="semibold">{item.fields.recipientName}</ThemedText>
-              {item.isDefault ? <ThemedText variant="caption" color="accent">Default</ThemedText> : null}
+          <View style={[styles.card, { backgroundColor: colors.surfaceSunken }]}>
+            <View style={[styles.icon, { backgroundColor: colors.surface }]}>
+              <MapPinGlyph size={20} color={colors.textPrimary} />
             </View>
-            <ThemedText color="muted">
-              {item.fields.addressLine1}
-              {item.fields.addressLine2 ? `, ${item.fields.addressLine2}` : ''}, {item.fields.locality} {item.fields.postalCode}, {item.fields.countryCode}
-            </ThemedText>
-            <Button label="Remove" variant="ghost" size="sm" onPress={() => deleteAddress.mutate(item.id)} style={{ alignSelf: 'flex-start', marginTop: spacing[2] }} />
-          </Card>
+            <View style={{ flex: 1 }}>
+              <View style={styles.nameRow}>
+                <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 15, color: colors.textPrimary }}>{item.fields.recipientName}</ThemedText>
+                {item.isDefault ? (
+                  <View style={[styles.defaultPill, { backgroundColor: colors.accent }]}>
+                    <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 11, color: colors.onAccent }}>Default</ThemedText>
+                  </View>
+                ) : null}
+              </View>
+              <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 13, color: colors.textSecondary, marginTop: 4 }}>
+                {item.fields.addressLine1}
+                {item.fields.addressLine2 ? `, ${item.fields.addressLine2}` : ''}, {item.fields.locality} {item.fields.postalCode}, {item.fields.countryCode}
+              </ThemedText>
+            </View>
+            <Pressable accessibilityRole="button" accessibilityLabel="Remove address" hitSlop={10} onPress={() => deleteAddress.mutate(item.id)}>
+              <TrashGlyph size={20} color={colors.textMuted} />
+            </Pressable>
+          </View>
         )}
-        ListFooterComponent={<Button label="Add a new address" onPress={() => navigation.navigate('AddAddress')} style={{ marginTop: spacing[2] }} />}
+        ListFooterComponent={<EviraButton label="Add a new address" onPress={() => navigation.navigate('AddAddress')} style={{ marginTop: 8 }} />}
       />
-    </ThemedView>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  root: { flex: 1 },
+  listContent: { paddingHorizontal: 24, paddingBottom: 24, gap: 14 },
+  card: { flexDirection: 'row', alignItems: 'flex-start', gap: 14, borderRadius: 18, padding: 16 },
+  icon: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
+  nameRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  defaultPill: { borderRadius: 100, paddingHorizontal: 8, paddingVertical: 2 }
+});
