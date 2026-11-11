@@ -1,13 +1,14 @@
 import React from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@/theme/ThemeProvider';
-import { ThemedView } from '@/components/ui/Themed';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
-import { ProductCard } from '@/components/ProductCard';
+import { EviraHeader } from '@/components/evira';
+import { EviraProductCard } from '@/components/evira/ProductCard';
 import { useRecentlyViewed } from '@/hooks/useDiscovery';
 
 export default function RecentlyViewedScreen() {
-  const { spacing } = useTheme();
+  const { colors } = useTheme();
   const { data, isLoading, isError, error, refetch } = useRecentlyViewed();
 
   if (isLoading) return <LoadingState label="Loading…" />;
@@ -17,22 +18,30 @@ export default function RecentlyViewedScreen() {
 
   if (products.length === 0) {
     return (
-      <ThemedView style={{ flex: 1 }}>
+      <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
+        <EviraHeader title="Recently Viewed" />
         <EmptyState title="Nothing viewed yet" message="Products you look at will show up here." />
-      </ThemedView>
+      </SafeAreaView>
     );
   }
 
   return (
-    <ThemedView style={{ flex: 1 }}>
+    <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
+      <EviraHeader title="Recently Viewed" />
       <FlatList
         data={products}
         keyExtractor={(item) => item.id}
         numColumns={2}
-        columnWrapperStyle={{ justifyContent: 'space-between', paddingHorizontal: spacing[4] }}
-        contentContainerStyle={{ paddingVertical: spacing[4] }}
-        renderItem={({ item }) => <ProductCard product={item} />}
+        columnWrapperStyle={styles.columnWrap}
+        contentContainerStyle={styles.listContent}
+        renderItem={({ item }) => <EviraProductCard product={item} width={168} />}
       />
-    </ThemedView>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  root: { flex: 1 },
+  listContent: { paddingHorizontal: 24, paddingTop: 8, paddingBottom: 24 },
+  columnWrap: { justifyContent: 'space-between', marginBottom: 20 }
+});

@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
-import { ScrollView, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
-import { ThemedText, ThemedView } from '@/components/ui/Themed';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
+import { ThemedText } from '@/components/ui/Themed';
 import { QuantityStepper } from '@/components/ui/QuantityStepper';
 import { ErrorState, LoadingState } from '@/components/ui/states';
-import { useOrder } from '@/hooks/useOrders';
-import { useCreateReturn } from '@/hooks/useOrders';
+import { EviraButton, EviraHeader } from '@/components/evira';
+import { CheckGlyph } from '@/components/ui/icons';
+import { useOrder, useCreateReturn } from '@/hooks/useOrders';
 import { ApiClientError } from '@shopsphere/api-client';
 import type { AppParamList } from '@/navigation/types';
 
+/** No kit screen covers return requests -- restyled for visual consistency with the rest of the app. */
 export default function NewReturnScreen() {
   const { orderId } = useRoute<RouteProp<AppParamList, 'NewReturn'>>().params;
   const navigation = useNavigation();
-  const { colors, spacing, radii } = useTheme();
+  const { colors } = useTheme();
   const { data: order, isLoading, isError, error, refetch } = useOrder(orderId);
   const createReturn = useCreateReturn();
 
@@ -48,53 +50,72 @@ export default function NewReturnScreen() {
   };
 
   return (
-    <ThemedView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ padding: spacing[4] }}>
-        <ThemedText variant="heading" style={{ marginBottom: spacing[3] }}>
-          Select items to return
-        </ThemedText>
+    <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top', 'bottom']}>
+      <EviraHeader title="Request a Return" />
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <ThemedText style={[styles.sectionTitle, { color: colors.textPrimary }]}>Select items to return</ThemedText>
         {order.items.map((item) => {
           const isSelected = item.variantId in selectedQuantities;
           return (
-            <Card key={item.variantId} style={{ marginBottom: spacing[3], borderColor: isSelected ? colors.accent : colors.borderSubtle, borderWidth: isSelected ? 2 : 1 }}>
-              <ThemedText weight="medium">{item.name}</ThemedText>
-              <ThemedText variant="bodySmall" color="muted" style={{ marginBottom: spacing[2] }}>
-                Purchased qty {item.quantity}
-              </ThemedText>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Button label={isSelected ? 'Selected' : 'Select'} variant={isSelected ? 'primary' : 'outline'} size="sm" onPress={() => toggleItem(item.variantId, item.quantity)} />
-                {isSelected ? (
+            <Pressable
+              key={item.variantId}
+              onPress={() => toggleItem(item.variantId, item.quantity)}
+              style={[styles.card, { backgroundColor: colors.surfaceSunken, borderColor: isSelected ? colors.accent : 'transparent' }]}
+            >
+              <View style={styles.cardTop}>
+                <View style={[styles.checkbox, { borderColor: colors.accent, backgroundColor: isSelected ? colors.accent : 'transparent' }]}>
+                  {isSelected ? <CheckGlyph size={14} color={colors.onAccent} /> : null}
+                </View>
+                <View style={{ flex: 1 }}>
+                  <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 15, color: colors.textPrimary }}>{item.name}</ThemedText>
+                  <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 13, color: colors.textMuted, marginTop: 2 }}>
+                    Purchased qty {item.quantity}
+                  </ThemedText>
+                </View>
+              </View>
+              {isSelected ? (
+                <View style={styles.stepperRow}>
                   <QuantityStepper
                     quantity={selectedQuantities[item.variantId]!}
                     max={item.quantity}
                     onChange={(next) => setSelectedQuantities((prev) => ({ ...prev, [item.variantId]: next }))}
                   />
-                ) : null}
-              </View>
-            </Card>
+                </View>
+              ) : null}
+            </Pressable>
           );
         })}
 
-        <ThemedText variant="label" style={{ marginBottom: spacing[1] }}>
-          Reason (optional)
-        </ThemedText>
+        <ThemedText style={[styles.sectionTitle, { color: colors.textPrimary, marginTop: 24 }]}>Reason (optional)</ThemedText>
         <TextInput
           value={reason}
           onChangeText={setReason}
           multiline
           placeholder="What's the reason for this return?"
           placeholderTextColor={colors.textMuted}
-          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: radii.md, padding: spacing[3], color: colors.textPrimary, minHeight: 60, marginBottom: spacing[4] }}
+          style={[styles.textarea, { backgroundColor: colors.surfaceSunken, color: colors.textPrimary }]}
         />
 
-        {submitError ? (
-          <ThemedText color="danger" style={{ marginBottom: spacing[3] }}>
-            {submitError}
-          </ThemedText>
-        ) : null}
+        {submitError ? <ThemedText style={{ color: colors.danger, marginBottom: 12 }}>{submitError}</ThemedText> : null}
 
-        <Button label="Submit return request" fullWidth loading={createReturn.isPending} disabled={Object.keys(selectedQuantities).length === 0} onPress={onSubmit} />
+        <EviraButton
+          label="Submit Return Request"
+          loading={createReturn.isPending}
+          disabled={Object.keys(selectedQuantities).length === 0}
+          onPress={onSubmit}
+        />
       </ScrollView>
-    </ThemedView>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  root: { flex: 1 },
+  content: { paddingHorizontal: 24, paddingBottom: 24 },
+  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: 18, marginBottom: 14 },
+  card: { borderRadius: 18, borderWidth: 2, padding: 16, marginBottom: 12 },
+  cardTop: { flexDirection: 'row', alignItems: 'center', gap: 14 },
+  checkbox: { width: 22, height: 22, borderRadius: 7, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
+  stepperRow: { marginTop: 12, alignItems: 'flex-end' },
+  textarea: { borderRadius: 16, padding: 16, minHeight: 80, textAlignVertical: 'top', fontFamily: fontFamilies.medium, fontSize: 14, marginBottom: 20 }
+});
