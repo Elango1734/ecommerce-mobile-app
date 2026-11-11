@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createBottomTabNavigator, type BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useTheme } from '@/theme/ThemeProvider';
 import { shadow } from '@/theme/shadow';
+import { fontFamilies } from '@shopsphere/config';
 import { ThemedText } from '@/components/ui/Themed';
 import { AnimatedPressable } from '@/components/ui/AnimatedPressable';
 import { HomeGlyph, GridGlyph, CartGlyph, GearGlyph, SparklesGlyph } from '@/components/ui/icons';
@@ -31,7 +32,7 @@ const TAB_LABELS: Record<string, string> = {
   Home: 'Home',
   Search: 'Categories',
   Cart: 'Cart',
-  Account: 'Settings'
+  Account: 'Profile'
 };
 
 function TabButton({
@@ -45,14 +46,10 @@ function TabButton({
   onPress: () => void;
   badgeCount: number;
 }) {
-  const { colors, spacing } = useTheme();
-  const scale = useRef(new Animated.Value(focused ? 1 : 0.9)).current;
+  const { colors } = useTheme();
   const Glyph = GLYPHS[routeName] ?? HomeGlyph;
   const label = TAB_LABELS[routeName] ?? routeName;
-
-  useEffect(() => {
-    Animated.spring(scale, { toValue: focused ? 1 : 0.9, useNativeDriver: true, speed: 40, bounciness: 8 }).start();
-  }, [focused, scale]);
+  const tint = focused ? colors.textPrimary : colors.textMuted;
 
   return (
     <Pressable
@@ -60,37 +57,37 @@ function TabButton({
       accessibilityLabel={label}
       accessibilityState={{ selected: focused }}
       onPress={onPress}
-      style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: spacing[2] }}
+      style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 4 }}
     >
-      {/* The active tab is marked by glyph colour and weight alone — no tinted
-          pill behind it. */}
-      <Animated.View style={{ transform: [{ scale }] }}>
-        <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
-          <View>
-            <Glyph size={23} color={focused ? colors.accent : colors.textMuted} strokeWidth={focused ? 2.2 : 1.9} />
-            {badgeCount > 0 ? (
-              <View
-                style={{
-                  position: 'absolute',
-                  top: -5,
-                  right: -9,
-                  minWidth: 15,
-                  height: 15,
-                  borderRadius: 8,
-                  backgroundColor: colors.danger,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  paddingHorizontal: 3
-                }}
-              >
-                <ThemedText style={{ fontSize: 9, lineHeight: 11, color: colors.onAccent }} weight="bold">
-                  {badgeCount > 9 ? '9+' : badgeCount}
-                </ThemedText>
-              </View>
-            ) : null}
+      <View>
+        <Glyph size={22} color={tint} strokeWidth={focused ? 2.2 : 1.8} />
+        {badgeCount > 0 ? (
+          <View
+            style={{
+              position: 'absolute',
+              top: -5,
+              right: -9,
+              minWidth: 15,
+              height: 15,
+              borderRadius: 8,
+              backgroundColor: colors.danger,
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingHorizontal: 3
+            }}
+          >
+            <ThemedText style={{ fontSize: 9, lineHeight: 11, color: colors.onAccent }} weight="bold">
+              {badgeCount > 9 ? '9+' : badgeCount}
+            </ThemedText>
           </View>
-        </View>
-      </Animated.View>
+        ) : null}
+      </View>
+      <ThemedText
+        numberOfLines={1}
+        style={{ fontFamily: focused ? fontFamilies.bold : fontFamilies.medium, fontSize: 11, lineHeight: 14, color: tint }}
+      >
+        {label}
+      </ThemedText>
     </Pressable>
   );
 }
@@ -144,7 +141,7 @@ function AiLaunchButton({ onPress }: { onPress: () => void }) {
 }
 
 /** Thickness of the bar — where the tab icons sit. */
-const BAR_HEIGHT = 45;
+const BAR_HEIGHT = 56;
 const LAUNCHER_RADIUS = 28;
 /** Launcher centre, relative to the top of the bar; negative half rides above it. */
 const LAUNCHER_CENTER_Y = 10;

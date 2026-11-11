@@ -1,7 +1,7 @@
 import React from 'react';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 
-interface GlyphProps {
+export interface GlyphProps {
   size?: number;
   color: string;
   strokeWidth?: number;
@@ -521,6 +521,74 @@ export function ShareGlyph(p: GlyphProps) {
       <Path d="M12 2v13" />
       <Path d="m16 6-4-4-4 4" />
       <Path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+    </Glyph>
+  );
+}
+
+/* ---- category glyphs (mapped onto this backend's real category slugs) ---- */
+
+export function ShirtGlyph(p: GlyphProps) {
+  return (
+    <Glyph {...p}>
+      <Path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
+    </Glyph>
+  );
+}
+
+export function BookGlyph(p: GlyphProps) {
+  return (
+    <Glyph {...p}>
+      <Path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+      <Path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+    </Glyph>
+  );
+}
+
+export function DropletGlyph(p: GlyphProps) {
+  return (
+    <Glyph {...p}>
+      <Path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z" />
+    </Glyph>
+  );
+}
+
+export function BasketGlyph(p: GlyphProps) {
+  return (
+    <Glyph {...p}>
+      <Path d="m5 11 4-7" />
+      <Path d="m19 11-4-7" />
+      <Path d="M2 11h20l-1.6 8.1a2 2 0 0 1-2 1.9H5.6a2 2 0 0 1-2-1.9z" />
+      <Path d="M4.5 15.5h15" />
+      <Path d="M12 11v4" />
+    </Glyph>
+  );
+}
+
+export function HouseGlyph(p: GlyphProps) {
+  return (
+    <Glyph {...p}>
+      <Path d="M3 9.5 12 3l9 6.5" />
+      <Path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5" />
+    </Glyph>
+  );
+}
+
+export function TrophyGlyph(p: GlyphProps) {
+  return (
+    <Glyph {...p}>
+      <Path d="M8 21h8" />
+      <Path d="M12 17v4" />
+      <Path d="M7 4h10v5a5 5 0 0 1-10 0z" />
+      <Path d="M17 5h2.5a1 1 0 0 1 1 1.3A4.5 4.5 0 0 1 17 9.5" />
+      <Path d="M7 5H4.5a1 1 0 0 0-1 1.3A4.5 4.5 0 0 0 7 9.5" />
+    </Glyph>
+  );
+}
+
+export function ZapGlyph(p: GlyphProps) {
+  return (
+    <Glyph {...p}>
+      <Path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
     </Glyph>
   );
 }
