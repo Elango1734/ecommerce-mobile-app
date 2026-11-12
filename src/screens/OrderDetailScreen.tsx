@@ -6,7 +6,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { ErrorState, LoadingState } from '@/components/ui/states';
-import { EviraButton, EviraHeader } from '@/components/evira';
+import { EviraButton, EviraHeader, EviraScreen } from '@/components/evira';
 import { StarFilledGlyph, StarGlyph, TruckGlyph } from '@/components/ui/icons';
 import { useCancelOrder, useOrder, useOrderShipments } from '@/hooks/useOrders';
 import { useCreateReview } from '@/hooks/useReviews';
@@ -76,8 +76,8 @@ export default function OrderDetailScreen() {
   const [cancelError, setCancelError] = useState<string | null>(null);
   const [reviewingVariantId, setReviewingVariantId] = useState<string | null>(null);
 
-  if (isLoading) return <LoadingState label="Loading order…" />;
-  if (isError || !order) return <ErrorState message={(error as Error)?.message ?? 'Order not found'} onRetry={() => refetch()} />;
+  if (isLoading) return <EviraScreen title="Order"><LoadingState label="Loading order…" /></EviraScreen>;
+  if (isError || !order) return <EviraScreen title="Order"><ErrorState message={(error as Error)?.message ?? 'Order not found'} onRetry={() => refetch()} /></EviraScreen>;
 
   const canCancel = CANCELLABLE_STATUSES.has(order.fulfillmentStatus);
   const canReturn = order.fulfillmentStatus === 'delivered';

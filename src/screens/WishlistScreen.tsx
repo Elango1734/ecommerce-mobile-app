@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@/theme/ThemeProvider';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
-import { EviraHeader } from '@/components/evira';
+import { EviraHeader, EviraScreen } from '@/components/evira';
 import { EviraProductCard } from '@/components/evira/ProductCard';
 import { useWishlist } from '@/hooks/useDiscovery';
 import { useIsAuthenticated } from '@/stores/authStore';
@@ -18,20 +18,20 @@ export default function WishlistScreen() {
 
   if (!isAuthenticated) {
     return (
-      <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
+      <EviraScreen title="My Wishlist">
         <EmptyState illustration="login" title="Sign in to save favorites" actionLabel="Sign in" onAction={() => navigation.navigate('Login')} />
-      </SafeAreaView>
+      </EviraScreen>
     );
   }
-  if (isLoading) return <LoadingState label="Loading wishlist…" />;
-  if (isError) return <ErrorState message={(error as Error).message} onRetry={() => refetch()} />;
+  if (isLoading) return <EviraScreen title="My Wishlist"><LoadingState label="Loading wishlist…" /></EviraScreen>;
+  if (isError) return <EviraScreen title="My Wishlist"><ErrorState message={(error as Error).message} onRetry={() => refetch()} /></EviraScreen>;
 
   const items = (data ?? []).filter((item) => item.product);
   if (items.length === 0) {
     return (
-      <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
-        <EmptyState illustration="wishlist" title="Your wishlist is empty" actionLabel="Browse products" onAction={() => navigation.navigate('Search')} />
-      </SafeAreaView>
+      <EviraScreen title="My Wishlist">
+        <EmptyState illustration="wishlist" title="Your wishlist is empty" actionLabel="Browse products" onAction={() => navigation.navigate('Categories')} />
+      </EviraScreen>
     );
   }
 

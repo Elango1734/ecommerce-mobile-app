@@ -3,7 +3,7 @@ import { FlatList, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@/theme/ThemeProvider';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
-import { EviraHeader } from '@/components/evira';
+import { EviraHeader, EviraScreen } from '@/components/evira';
 import { EviraProductCard } from '@/components/evira/ProductCard';
 import { useRecentlyViewed } from '@/hooks/useDiscovery';
 
@@ -11,8 +11,8 @@ export default function RecentlyViewedScreen() {
   const { colors } = useTheme();
   const { data, isLoading, isError, error, refetch } = useRecentlyViewed();
 
-  if (isLoading) return <LoadingState label="Loading…" />;
-  if (isError) return <ErrorState message={(error as Error).message} onRetry={() => refetch()} />;
+  if (isLoading) return <EviraScreen title="Recently Viewed"><LoadingState label="Loading…" /></EviraScreen>;
+  if (isError) return <EviraScreen title="Recently Viewed"><ErrorState message={(error as Error).message} onRetry={() => refetch()} /></EviraScreen>;
 
   const products = (data ?? []).map((item) => item.product).filter((p): p is NonNullable<typeof p> => Boolean(p));
 

@@ -6,9 +6,9 @@ import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { LoadingState, ErrorState } from '@/components/ui/states';
-import { SearchGlyph, BellGlyph, HeartGlyph, FilterGlyph, UserGlyph } from '@/components/ui/icons';
+import { SearchGlyph, BellGlyph, HeartGlyph, FilterGlyph, UserGlyph, GridGlyph } from '@/components/ui/icons';
 import { EviraProductCard } from '@/components/evira/ProductCard';
-import { ProductImage } from '@/components/ProductImage';
+import { OfferCarousel } from '@/components/evira/OfferCarousel';
 import { categoryIcon } from '@/components/evira/categoryIcon';
 import { useCategories, useProducts } from '@/hooks/useCatalog';
 import { useAuthStore } from '@/stores/authStore';
@@ -80,7 +80,7 @@ export default function HomeScreen() {
                 accessibilityLabel="Notifications"
                 hitSlop={8}
                 style={styles.headerIcon}
-                onPress={() => navigation.navigate('Settings')}
+                onPress={() => navigation.navigate('Notifications')}
               >
                 <BellGlyph size={24} color={colors.textPrimary} />
               </Pressable>
@@ -112,45 +112,29 @@ export default function HomeScreen() {
               <View style={styles.section}>
                 <View style={styles.sectionHeader}>
                   <ThemedText style={[styles.sectionTitle, { color: colors.textPrimary }]}>Special Offers</ThemedText>
-                  <Pressable onPress={() => navigation.navigate('Search')}>
+                  <Pressable accessibilityRole="button" onPress={() => navigation.navigate('SpecialOffers')}>
                     <ThemedText style={[styles.seeAll, { color: colors.textSecondary }]}>See All</ThemedText>
                   </Pressable>
                 </View>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.offerScroll}>
-                  {offers.map((p) => (
-                    <Pressable
-                      key={p.id}
-                      onPress={() => navigation.navigate('ProductDetail', { slug: p.slug })}
-                      style={[styles.offerCard, { backgroundColor: colors.surfaceSunken }]}
-                    >
-                      <View style={styles.offerImage}>
-                        <ProductImage storageKey={p.images[0]?.storageKey} altText={p.name} />
-                      </View>
-                      <View style={[styles.offerScrim, { backgroundColor: colors.surface, opacity: 0.86 }]} />
-                      <ThemedText numberOfLines={2} style={[styles.offerTitle, { color: colors.textPrimary }]}>
-                        {p.name}
-                      </ThemedText>
-                      <ThemedText style={[styles.offerSub, { color: colors.textSecondary }]}>
-                        Today&rsquo;s pick, check it out
-                      </ThemedText>
-                    </Pressable>
-                  ))}
-                </ScrollView>
+                <View style={{ marginTop: 16 }}>
+                  <OfferCarousel products={offers} />
+                </View>
               </View>
             ) : null}
 
-            {/* Category grid */}
+            {/* Category grid. Seven categories + an "All" tile fill the kit's
+                two rows of four exactly; slice keeps that true if more are added. */}
             {categories.data && categories.data.length > 0 ? (
               <View style={styles.section}>
                 <ThemedText style={[styles.sectionTitle, { color: colors.textPrimary }]}>Shop by category</ThemedText>
                 <View style={styles.categoryGrid}>
-                  {categories.data.slice(0, 8).map((category) => {
+                  {categories.data.slice(0, 7).map((category) => {
                     const Icon = categoryIcon(category.slug);
                     return (
                       <Pressable
                         key={category.id}
                         accessibilityRole="button"
-                        onPress={() => navigation.navigate('Search', { categoryId: category.id, categoryName: category.name })}
+                        onPress={() => navigation.navigate('Categories', { categoryId: category.id })}
                         style={styles.categoryItem}
                       >
                         <View style={[styles.categoryIcon, { backgroundColor: colors.surfaceSunken }]}>
@@ -162,6 +146,18 @@ export default function HomeScreen() {
                       </Pressable>
                     );
                   })}
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => navigation.navigate('Categories')}
+                    style={styles.categoryItem}
+                  >
+                    <View style={[styles.categoryIcon, { backgroundColor: colors.surfaceSunken }]}>
+                      <GridGlyph size={26} color={colors.textPrimary} />
+                    </View>
+                    <ThemedText numberOfLines={1} style={[styles.categoryLabel, { color: colors.textPrimary }]}>
+                      All
+                    </ThemedText>
+                  </Pressable>
                 </View>
               </View>
             ) : null}
@@ -227,15 +223,9 @@ const styles = StyleSheet.create({
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   sectionTitle: { fontFamily: fontFamilies.bold, fontSize: 20, lineHeight: 25 },
   seeAll: { fontFamily: fontFamilies.semibold, fontSize: 14 },
-  offerScroll: { gap: 16, paddingTop: 16, paddingRight: 24 },
-  offerCard: { width: 280, height: 160, borderRadius: 20, padding: 20, justifyContent: 'flex-end', overflow: 'hidden' },
-  offerImage: { ...StyleSheet.absoluteFillObject },
-  offerScrim: { ...StyleSheet.absoluteFillObject },
-  offerTitle: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 22 },
-  offerSub: { fontFamily: fontFamilies.medium, fontSize: 13, marginTop: 4 },
-  categoryGrid: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 16, rowGap: 20 },
+  categoryGrid: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 18, rowGap: 22 },
   categoryItem: { width: '25%', alignItems: 'center', gap: 8 },
-  categoryIcon: { width: 60, height: 60, borderRadius: 30, alignItems: 'center', justifyContent: 'center' },
+  categoryIcon: { width: 62, height: 62, borderRadius: 31, alignItems: 'center', justifyContent: 'center' },
   categoryLabel: { fontFamily: fontFamilies.semibold, fontSize: 12, textAlign: 'center' },
   chipScroll: { gap: 10, paddingTop: 16, paddingRight: 24 },
   chip: { height: 44, borderRadius: 100, borderWidth: 1.5, paddingHorizontal: 20, alignItems: 'center', justifyContent: 'center' },

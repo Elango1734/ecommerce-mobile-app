@@ -7,7 +7,7 @@ import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { LoadingState, ErrorState, EmptyState } from '@/components/ui/states';
-import { EviraButton, EviraHeader } from '@/components/evira';
+import { EviraButton, EviraHeader, EviraScreen } from '@/components/evira';
 import { MapPinGlyph, PlusGlyph, TagGlyph } from '@/components/ui/icons';
 import { useCart } from '@/hooks/useCart';
 import { useAddresses } from '@/hooks/useAddresses';
@@ -38,10 +38,10 @@ export default function CheckoutScreen() {
   const defaultAddress = addresses.data?.find((a) => a.isDefault) ?? addresses.data?.[0];
   const activeAddressId = selectedAddressId ?? defaultAddress?.id;
 
-  if (cart.isLoading || addresses.isLoading) return <LoadingState label="Preparing checkout…" />;
-  if (cart.isError) return <ErrorState message={(cart.error as Error).message} onRetry={() => cart.refetch()} />;
+  if (cart.isLoading || addresses.isLoading) return <EviraScreen title="Checkout"><LoadingState label="Preparing checkout…" /></EviraScreen>;
+  if (cart.isError) return <EviraScreen title="Checkout"><ErrorState message={(cart.error as Error).message} onRetry={() => cart.refetch()} /></EviraScreen>;
   if (!cart.data || cart.data.items.length === 0) {
-    return <EmptyState illustration="emptyCart" title="Your cart is empty" message="Add something to your cart before checking out." />;
+    return <EviraScreen title="Checkout"><EmptyState illustration="emptyCart" title="Your cart is empty" message="Add something to your cart before checking out." /></EviraScreen>;
   }
   if (!addresses.data || addresses.data.length === 0) {
     return (

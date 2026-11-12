@@ -8,7 +8,7 @@ import { ThemedText } from '@/components/ui/Themed';
 import { QuantityStepper } from '@/components/ui/QuantityStepper';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
 import { ProductImage } from '@/components/ProductImage';
-import { EviraButton, EviraHeader } from '@/components/evira';
+import { EviraButton, EviraHeader, EviraScreen } from '@/components/evira';
 import { TrashGlyph } from '@/components/ui/icons';
 import { useCart, useRemoveCartItem, useUpdateCartItem } from '@/hooks/useCart';
 import { useIsAuthenticated } from '@/stores/authStore';
@@ -61,10 +61,10 @@ export default function CartScreen() {
   const { data: cart, isLoading, isError, error, refetch } = useCart();
   const removeItem = useRemoveCartItem();
 
-  if (isLoading) return <LoadingState label="Loading your cart…" />;
-  if (isError) return <ErrorState message={(error as Error).message} onRetry={() => refetch()} />;
+  if (isLoading) return <EviraScreen title="My Cart"><LoadingState label="Loading your cart…" /></EviraScreen>;
+  if (isError) return <EviraScreen title="My Cart"><ErrorState message={(error as Error).message} onRetry={() => refetch()} /></EviraScreen>;
   if (!cart || cart.items.length === 0) {
-    return <EmptyState illustration="emptyCart" title="Your cart is empty" message="Browse the catalog to find something you'll love." actionLabel="Browse products" onAction={() => navigation.navigate('Search')} />;
+    return <EviraScreen title="My Cart"><EmptyState illustration="emptyCart" title="Your cart is empty" message="Browse the catalog to find something you'll love." actionLabel="Browse products" onAction={() => navigation.navigate('Categories')} /></EviraScreen>;
   }
 
   const subtotalMinor = cart.items.reduce((sum, item) => sum + item.indicativeUnitPrice.amountMinor * item.quantity, 0);

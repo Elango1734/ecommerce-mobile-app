@@ -16,11 +16,18 @@ import {
   type ViewStyle
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ArrowLeftGlyph } from '@/components/ui/icons';
 
-/** Screen title row: 28x28 back button + 24/700 title, 48pt tall. */
+/**
+ * Screen title row: 28x28 back button + 24/700 title, 48pt tall.
+ *
+ * The back control is hidden where there is nothing to pop — on a tab root the
+ * arrow used to render anyway and dispatch a GO_BACK no navigator handled.
+ * Pass `onBack` to force it (a custom dismiss still needs the control).
+ */
 export function EviraHeader({
   title,
   right,
@@ -32,17 +39,20 @@ export function EviraHeader({
 }) {
   const { colors } = useTheme();
   const navigation = useNavigation();
+  const showBack = Boolean(onBack) || navigation.canGoBack();
   return (
     <View style={styles.header}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Go back"
-        hitSlop={12}
-        onPress={onBack ?? (() => navigation.goBack())}
-        style={styles.iconButton}
-      >
-        <ArrowLeftGlyph size={24} color={colors.textPrimary} />
-      </Pressable>
+      {showBack ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Go back"
+          hitSlop={12}
+          onPress={onBack ?? (() => navigation.goBack())}
+          style={styles.iconButton}
+        >
+          <ArrowLeftGlyph size={24} color={colors.textPrimary} />
+        </Pressable>
+      ) : null}
       {title ? (
         <Text numberOfLines={1} style={[styles.headerTitle, { color: colors.textPrimary }]}>
           {title}
@@ -52,6 +62,32 @@ export function EviraHeader({
       )}
       {right ? <View style={styles.headerRight}>{right}</View> : null}
     </View>
+  );
+}
+
+/**
+ * Safe-area frame + header, for screens whose body swaps between loading, error,
+ * empty and loaded states. Returning a bare `<LoadingState />` from an early
+ * branch — as every list screen here used to — leaves the user on a screen with
+ * no back control at all, which is how the wishlist's empty state stranded you.
+ */
+export function EviraScreen({
+  title,
+  right,
+  onBack,
+  children
+}: {
+  title?: string;
+  right?: React.ReactNode;
+  onBack?: () => void;
+  children: React.ReactNode;
+}) {
+  const { colors } = useTheme();
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['top']}>
+      <EviraHeader title={title} right={right} onBack={onBack} />
+      {children}
+    </SafeAreaView>
   );
 }
 

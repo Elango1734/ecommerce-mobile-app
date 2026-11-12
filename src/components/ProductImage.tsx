@@ -10,8 +10,20 @@ import { ThemedText } from './ui/Themed';
  * key happens to already be a full URL (e.g. seeded with one), render it;
  * otherwise show a deliberate, on-brand placeholder rather than a broken
  * image or a silently blank box.
+ *
+ * The wrapper always paints `surfaceSunken`, so every tile reads as the same
+ * grey panel whether the photo loads, fails, letterboxes under `fit="contain"`,
+ * or is a transparent-background PNG — the kit's product grid is uniform.
  */
-export function ProductImage({ storageKey, altText }: { storageKey?: string; altText?: string }) {
+export function ProductImage({
+  storageKey,
+  altText,
+  fit = 'cover'
+}: {
+  storageKey?: string;
+  altText?: string;
+  fit?: 'cover' | 'contain';
+}) {
   const { colors } = useTheme();
   const isResolvableUrl = Boolean(storageKey && /^https?:\/\//.test(storageKey));
   const opacity = useRef(new Animated.Value(0)).current;
@@ -24,7 +36,7 @@ export function ProductImage({ storageKey, altText }: { storageKey?: string; alt
           accessibilityLabel={altText}
           onLoad={() => Animated.timing(opacity, { toValue: 1, duration: 260, useNativeDriver: true }).start()}
           style={{ width: '100%', height: '100%', opacity }}
-          resizeMode="cover"
+          resizeMode={fit}
         />
       </View>
     );

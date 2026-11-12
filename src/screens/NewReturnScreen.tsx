@@ -7,7 +7,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { QuantityStepper } from '@/components/ui/QuantityStepper';
 import { ErrorState, LoadingState } from '@/components/ui/states';
-import { EviraButton, EviraHeader } from '@/components/evira';
+import { EviraButton, EviraHeader, EviraScreen } from '@/components/evira';
 import { CheckGlyph } from '@/components/ui/icons';
 import { useOrder, useCreateReturn } from '@/hooks/useOrders';
 import { ApiClientError } from '@shopsphere/api-client';
@@ -25,8 +25,8 @@ export default function NewReturnScreen() {
   const [reason, setReason] = useState('');
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  if (isLoading) return <LoadingState label="Loading order…" />;
-  if (isError || !order) return <ErrorState message={(error as Error)?.message ?? 'Order not found'} onRetry={() => refetch()} />;
+  if (isLoading) return <EviraScreen title="Request a Return"><LoadingState label="Loading order…" /></EviraScreen>;
+  if (isError || !order) return <EviraScreen title="Request a Return"><ErrorState message={(error as Error)?.message ?? 'Order not found'} onRetry={() => refetch()} /></EviraScreen>;
 
   const toggleItem = (variantId: string, maxQuantity: number) => {
     setSelectedQuantities((prev) => {

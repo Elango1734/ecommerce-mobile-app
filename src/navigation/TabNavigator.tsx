@@ -4,13 +4,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createBottomTabNavigator, type BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useTheme } from '@/theme/ThemeProvider';
 import { shadow } from '@/theme/shadow';
-import { fontFamilies } from '@shopsphere/config';
 import { ThemedText } from '@/components/ui/Themed';
 import { AnimatedPressable } from '@/components/ui/AnimatedPressable';
 import { HomeGlyph, GridGlyph, CartGlyph, GearGlyph, SparklesGlyph } from '@/components/ui/icons';
 import { useCart } from '@/hooks/useCart';
 import HomeScreen from '@/screens/HomeScreen';
-import SearchScreen from '@/screens/SearchScreen';
+import CategoriesScreen from '@/screens/CategoriesScreen';
 import CartScreen from '@/screens/CartScreen';
 import AccountScreen from '@/screens/AccountScreen';
 import type { TabParamList } from './types';
@@ -19,18 +18,18 @@ const Tab = createBottomTabNavigator<TabParamList>();
 
 const GLYPHS: Record<string, React.ComponentType<{ size?: number; color: string; strokeWidth?: number }>> = {
   Home: HomeGlyph,
-  Search: GridGlyph,
+  Categories: GridGlyph,
   Cart: CartGlyph,
   Account: GearGlyph
 };
 
 /**
- * The tab bar is icon-only — these are no longer rendered as captions, but are
- * still the accessibility labels, so the tabs stay announceable to VoiceOver.
+ * The tab bar is icon-only — these are never rendered as captions, they are
+ * only the accessibility labels, so the tabs stay announceable to VoiceOver.
  */
 const TAB_LABELS: Record<string, string> = {
   Home: 'Home',
-  Search: 'Categories',
+  Categories: 'Categories',
   Cart: 'Cart',
   Account: 'Profile'
 };
@@ -57,10 +56,10 @@ function TabButton({
       accessibilityLabel={label}
       accessibilityState={{ selected: focused }}
       onPress={onPress}
-      style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 4 }}
+      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
     >
       <View>
-        <Glyph size={22} color={tint} strokeWidth={focused ? 2.2 : 1.8} />
+        <Glyph size={26} color={tint} strokeWidth={focused ? 2.2 : 1.8} />
         {badgeCount > 0 ? (
           <View
             style={{
@@ -82,12 +81,6 @@ function TabButton({
           </View>
         ) : null}
       </View>
-      <ThemedText
-        numberOfLines={1}
-        style={{ fontFamily: focused ? fontFamilies.bold : fontFamilies.medium, fontSize: 11, lineHeight: 14, color: tint }}
-      >
-        {label}
-      </ThemedText>
     </Pressable>
   );
 }
@@ -190,7 +183,7 @@ export function TabNavigator() {
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }} tabBar={(props) => <CustomTabBar {...props} />}>
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Search" component={SearchScreen} />
+      <Tab.Screen name="Categories" component={CategoriesScreen} />
       <Tab.Screen name="Cart" component={CartScreen} />
       <Tab.Screen name="Account" component={AccountScreen} />
     </Tab.Navigator>

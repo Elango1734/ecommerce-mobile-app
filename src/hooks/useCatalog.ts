@@ -11,11 +11,17 @@ export function useBrands() {
   return useQuery({ queryKey: queryKeys.brands, queryFn: () => api.catalog.listBrands() });
 }
 
-export function useProducts(query: ProductListQuery) {
+/** Campaign discounts currently running — see GET /promotions. */
+export function usePromotions() {
+  return useQuery({ queryKey: queryKeys.promotions, queryFn: () => api.catalog.listPromotions() });
+}
+
+export function useProducts(query: ProductListQuery, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: queryKeys.products(query),
     queryFn: () => api.catalog.listProducts(query),
-    placeholderData: (previous) => previous
+    placeholderData: (previous) => previous,
+    enabled: options?.enabled ?? true
   });
 }
 

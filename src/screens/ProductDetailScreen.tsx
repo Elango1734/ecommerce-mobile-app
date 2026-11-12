@@ -12,9 +12,8 @@ import { EviraButton } from '@/components/evira';
 import { ArrowLeftGlyph, HeartFilledGlyph, HeartGlyph, ShareGlyph, StarFilledGlyph } from '@/components/ui/icons';
 import { useProduct, useProductQuestions, useProductReviews } from '@/hooks/useCatalog';
 import { useAddToCart } from '@/hooks/useCart';
-import { useToggleWishlist, useWishlist } from '@/hooks/useDiscovery';
+import { useWishlistToggle } from '@/hooks/useDiscovery';
 import { useAiCompare, useRelatedProducts, useReviewSummary } from '@/hooks/useAi';
-import { useIsAuthenticated } from '@/stores/authStore';
 import { formatMoney } from '@/utils/money';
 import { getAttributeNames, resolveSelectedVariant } from '@/utils/variants';
 import { ApiClientError } from '@shopsphere/api-client';
@@ -25,15 +24,13 @@ export default function ProductDetailScreen() {
   const { slug } = useRoute<RouteProp<AppParamList, 'ProductDetail'>>().params;
   const navigation = useNavigation();
   const { colors } = useTheme();
-  const isAuthenticated = useIsAuthenticated();
 
   const { data: product, isLoading, isError, error, refetch } = useProduct(slug);
   const reviews = useProductReviews(slug);
   const questions = useProductQuestions(slug);
   const reviewSummary = useReviewSummary(slug);
   const relatedProducts = useRelatedProducts(slug);
-  const wishlist = useWishlist();
-  const toggleWishlist = useToggleWishlist();
+  const wishlist = useWishlistToggle();
   const addToCart = useAddToCart();
   const aiCompare = useAiCompare();
 
@@ -88,7 +85,7 @@ export default function ProductDetailScreen() {
   if (isLoading) return <LoadingState label="Loading product…" />;
   if (isError || !product) return <ErrorState message={(error as Error)?.message ?? 'Product not found'} onRetry={() => refetch()} />;
 
-  const isWishlisted = wishlist.data?.some((item) => item.productId === product.id) ?? false;
+  const isWishlisted = wishlist.isWishlisted(product.id);
   const canAddToCart = Boolean(selectedVariant) && (selectedVariant?.availableQuantity ?? 0) > 0;
 
   return (
@@ -118,9 +115,8 @@ export default function ProductDetailScreen() {
                   accessibilityRole="button"
                   accessibilityLabel={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
                   onPress={() => {
-                    if (!isAuthenticated) return navigation.navigate('Login');
                     pulseHeart();
-                    toggleWishlist.mutate({ productId: product.id });
+                    wishlist.toggle(product.id);
                   }}
                   style={[styles.circleButton, { backgroundColor: colors.surface }]}
                 >

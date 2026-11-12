@@ -7,7 +7,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
-import { EviraButton, EviraHeader } from '@/components/evira';
+import { EviraButton, EviraHeader, EviraScreen } from '@/components/evira';
 import { ChevronRightGlyph, MessageGlyph } from '@/components/ui/icons';
 import { useCreateTicket, useSupportTickets } from '@/hooks/useSupport';
 import { useIsAuthenticated } from '@/stores/authStore';
@@ -27,13 +27,13 @@ export default function SupportScreen() {
 
   if (!isAuthenticated) {
     return (
-      <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
+      <EviraScreen title="Support">
         <EmptyState illustration="login" title="Sign in for support" actionLabel="Sign in" onAction={() => navigation.navigate('Login')} />
-      </SafeAreaView>
+      </EviraScreen>
     );
   }
-  if (isLoading) return <LoadingState label="Loading tickets…" />;
-  if (isError) return <ErrorState message={(error as Error).message} onRetry={() => refetch()} />;
+  if (isLoading) return <EviraScreen title="Support"><LoadingState label="Loading tickets…" /></EviraScreen>;
+  if (isError) return <EviraScreen title="Support"><ErrorState message={(error as Error).message} onRetry={() => refetch()} /></EviraScreen>;
 
   const onCreate = async () => {
     if (!subject.trim() || !message.trim()) return;

@@ -31,6 +31,7 @@ export const queryClient = new QueryClient({
 export const queryKeys = {
   categories: ['categories'] as const,
   brands: ['brands'] as const,
+  promotions: ['promotions'] as const,
   products: (query: object) => ['products', query] as const,
   product: (slug: string) => ['product', slug] as const,
   productReviews: (slug: string) => ['product-reviews', slug] as const,

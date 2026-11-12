@@ -5,7 +5,7 @@ import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { ErrorState, LoadingState } from '@/components/ui/states';
-import { EviraHeader } from '@/components/evira';
+import { EviraHeader, EviraScreen } from '@/components/evira';
 import { SendGlyph } from '@/components/ui/icons';
 import { useAddSupportMessage, useSupportMessages, useSupportTicket } from '@/hooks/useSupport';
 import { useAuthStore } from '@/stores/authStore';
@@ -21,8 +21,8 @@ export default function SupportTicketScreen() {
   const addMessage = useAddSupportMessage(ticketId ?? '');
   const [body, setBody] = useState('');
 
-  if (ticket.isLoading || messages.isLoading) return <LoadingState label="Loading ticket…" />;
-  if (ticket.isError || !ticket.data) return <ErrorState message={(ticket.error as Error)?.message ?? 'Ticket not found'} onRetry={() => ticket.refetch()} />;
+  if (ticket.isLoading || messages.isLoading) return <EviraScreen title="Ticket"><LoadingState label="Loading ticket…" /></EviraScreen>;
+  if (ticket.isError || !ticket.data) return <EviraScreen title="Ticket"><ErrorState message={(ticket.error as Error)?.message ?? 'Ticket not found'} onRetry={() => ticket.refetch()} /></EviraScreen>;
 
   return (
     <View style={[styles.root, { backgroundColor: colors.background }]}>

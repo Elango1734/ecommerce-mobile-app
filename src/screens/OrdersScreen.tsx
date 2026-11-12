@@ -7,7 +7,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
-import { EviraHeader } from '@/components/evira';
+import { EviraHeader, EviraScreen } from '@/components/evira';
 import { ChevronRightGlyph, PackageGlyph } from '@/components/ui/icons';
 import { useOrders } from '@/hooks/useOrders';
 import { useIsAuthenticated } from '@/stores/authStore';
@@ -34,14 +34,14 @@ export default function OrdersScreen() {
 
   if (!isAuthenticated) {
     return (
-      <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>
+      <EviraScreen title="My Orders">
         <EmptyState illustration="login" title="Sign in to see your orders" actionLabel="Sign in" onAction={() => navigation.navigate('Login')} />
-      </SafeAreaView>
+      </EviraScreen>
     );
   }
 
-  if (isLoading) return <LoadingState label="Loading orders…" />;
-  if (isError) return <ErrorState message={(error as Error).message} onRetry={() => refetch()} />;
+  if (isLoading) return <EviraScreen title="My Orders"><LoadingState label="Loading orders…" /></EviraScreen>;
+  if (isError) return <EviraScreen title="My Orders"><ErrorState message={(error as Error).message} onRetry={() => refetch()} /></EviraScreen>;
 
   const list = tab === 'ongoing' ? ongoing : completed;
 
@@ -68,7 +68,7 @@ export default function OrdersScreen() {
           title={tab === 'ongoing' ? 'No ongoing orders' : 'No completed orders'}
           message="Your order history will show up here."
           actionLabel="Start shopping"
-          onAction={() => navigation.navigate('Search')}
+          onAction={() => navigation.navigate('Categories')}
         />
       ) : (
         <FlatList

@@ -6,7 +6,7 @@ import { fontFamilies } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
-import { EviraButton, EviraHeader } from '@/components/evira';
+import { EviraButton, EviraHeader, EviraScreen } from '@/components/evira';
 import { MapPinGlyph, TrashGlyph } from '@/components/ui/icons';
 import { useAddresses, useDeleteAddress } from '@/hooks/useAddresses';
 
@@ -17,8 +17,8 @@ export default function AddressesScreen() {
   const { data, isLoading, isError, error, refetch } = useAddresses();
   const deleteAddress = useDeleteAddress();
 
-  if (isLoading) return <LoadingState label="Loading addresses…" />;
-  if (isError) return <ErrorState message={(error as Error).message} onRetry={() => refetch()} />;
+  if (isLoading) return <EviraScreen title="Addresses"><LoadingState label="Loading addresses…" /></EviraScreen>;
+  if (isError) return <EviraScreen title="Addresses"><ErrorState message={(error as Error).message} onRetry={() => refetch()} /></EviraScreen>;
   if (!data || data.length === 0) {
     return (
       <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top']}>

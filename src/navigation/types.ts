@@ -1,6 +1,6 @@
 export type TabParamList = {
   Home: undefined;
-  Search: { categoryId?: string; categoryName?: string } | undefined;
+  Categories: { categoryId?: string } | undefined;
   Cart: undefined;
   Account: undefined;
 };
@@ -21,6 +21,7 @@ export type RootStackParamList = {
   CreateNewPassword: undefined;
   Login: undefined;
   Register: undefined;
+  Search: { categoryId?: string; categoryName?: string } | undefined;
   ProductDetail: { slug: string };
   Checkout: undefined;
   Orders: undefined;
@@ -30,6 +31,8 @@ export type RootStackParamList = {
   AiChat: { seedMessage?: string; mode?: 'discovery' | 'support'; orderId?: string } | undefined;
   Support: undefined;
   SupportTicket: { ticketId: string };
+  SpecialOffers: undefined;
+  Notifications: undefined;
   Wishlist: undefined;
   RecentlyViewed: undefined;
   Settings: undefined;
