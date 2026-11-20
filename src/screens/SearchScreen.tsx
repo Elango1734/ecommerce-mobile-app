@@ -3,7 +3,7 @@ import { FlatList, Modal, Pressable, ScrollView, StyleSheet, TextInput, View } f
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRoute, type RouteProp } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
@@ -390,7 +390,7 @@ function FilterChip({
     >
       {leading}
       <ThemedText
-        style={{ fontFamily: fontFamilies.semibold, fontSize: 14, color: active ? colors.onAccent : colors.textPrimary }}
+        style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.description, color: active ? colors.onAccent : colors.textPrimary }}
       >
         {label}
       </ThemedText>
@@ -402,21 +402,21 @@ const styles = StyleSheet.create({
   root: { flex: 1 },
   searchRow: { flexDirection: 'row', gap: 12, paddingHorizontal: 24, marginTop: 8 },
   field: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, height: 56, borderRadius: 16, paddingHorizontal: 20 },
-  input: { flex: 1, fontFamily: fontFamilies.semibold, fontSize: 16 },
+  input: { flex: 1, fontFamily: fontFamilies.semibold, fontSize: textSizes.normal },
   filterButton: { width: 56, height: 56, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
 
   recents: { flex: 1, paddingHorizontal: 24, paddingTop: 24 },
   recentsHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 },
-  recentsTitle: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 23 },
-  clearAll: { fontFamily: fontFamilies.semibold, fontSize: 13 },
-  recentsEmpty: { fontFamily: fontFamilies.medium, fontSize: 14, marginTop: 12 },
+  recentsTitle: { fontFamily: fontFamilies.bold, fontSize: textSizes.title, lineHeight: textLineHeights.title },
+  clearAll: { fontFamily: fontFamilies.semibold, fontSize: textSizes.description },
+  recentsEmpty: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, marginTop: 12 },
   recentRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 14 },
   recentHit: { flex: 1 },
-  recentLabel: { fontFamily: fontFamilies.medium, fontSize: 15, lineHeight: 20 },
+  recentLabel: { fontFamily: fontFamilies.medium, fontSize: textSizes.normal, lineHeight: textLineHeights.normal },
 
   resultHeader: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', paddingBottom: 16, gap: 12 },
-  resultTitle: { flex: 1, fontFamily: fontFamilies.bold, fontSize: 17, lineHeight: 22 },
-  resultCount: { fontFamily: fontFamilies.semibold, fontSize: 12, lineHeight: 16 },
+  resultTitle: { flex: 1, fontFamily: fontFamilies.bold, fontSize: textSizes.title, lineHeight: textLineHeights.title },
+  resultCount: { fontFamily: fontFamilies.semibold, fontSize: textSizes.description, lineHeight: textLineHeights.description },
   listContent: { paddingHorizontal: 24, paddingTop: 20, paddingBottom: 24 },
   columnWrap: { justifyContent: 'space-between', marginBottom: 20 },
   pager: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 16, paddingVertical: 16 },
@@ -425,8 +425,8 @@ const styles = StyleSheet.create({
   backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
   sheet: { maxHeight: '85%', borderTopLeftRadius: 32, borderTopRightRadius: 32, paddingHorizontal: 24, paddingTop: 12, paddingBottom: 32 },
   grabber: { alignSelf: 'center', width: 38, height: 4, borderRadius: 2, marginBottom: 12 },
-  sheetTitle: { fontFamily: fontFamilies.bold, fontSize: 20, textAlign: 'center', marginBottom: 8 },
-  groupLabel: { fontFamily: fontFamilies.bold, fontSize: 15, lineHeight: 20, marginTop: 20, marginBottom: 12 },
+  sheetTitle: { fontFamily: fontFamilies.bold, fontSize: textSizes.heading, textAlign: 'center', marginBottom: 8 },
+  groupLabel: { fontFamily: fontFamilies.bold, fontSize: textSizes.normal, lineHeight: textLineHeights.normal, marginTop: 20, marginBottom: 12 },
   chipWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   chip: { flexDirection: 'row', alignItems: 'center', gap: 5, height: 40, borderRadius: 100, borderWidth: 1.5, paddingHorizontal: 18 },
   sheetActions: { flexDirection: 'row', gap: 12, marginTop: 24 },

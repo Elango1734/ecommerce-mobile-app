@@ -13,6 +13,7 @@ import CategoriesScreen from '@/screens/CategoriesScreen';
 import CartScreen from '@/screens/CartScreen';
 import AccountScreen from '@/screens/AccountScreen';
 import type { TabParamList } from './types';
+import { textSizes } from '@shopsphere/config';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -66,16 +67,18 @@ function TabButton({
               position: 'absolute',
               top: -5,
               right: -9,
-              minWidth: 15,
-              height: 15,
-              borderRadius: 8,
+              // Sized to hold "9+" at textSizes.description — the scale's
+              // smallest role, so the badge grows rather than the type shrinking.
+              minWidth: 22,
+              height: 18,
+              borderRadius: 9,
               backgroundColor: colors.danger,
               alignItems: 'center',
               justifyContent: 'center',
               paddingHorizontal: 3
             }}
           >
-            <ThemedText style={{ fontSize: 9, lineHeight: 11, color: colors.onAccent }} weight="bold">
+            <ThemedText style={{ fontSize: textSizes.description, lineHeight: 18, color: colors.onAccent }} weight="bold">
               {badgeCount > 9 ? '9+' : badgeCount}
             </ThemedText>
           </View>

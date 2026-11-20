@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { EviraButton, EviraHeader, Illustration } from '@/components/evira';
 import type { AppParamList } from '@/navigation/types';
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   root: { flex: 1 },
   body: { flex: 1, paddingHorizontal: 24, paddingTop: 16 },
   illustrationWrap: { alignItems: 'center', marginBottom: 16 },
-  lead: { fontFamily: fontFamilies.medium, fontSize: 18, lineHeight: 25, textAlign: 'center' },
+  lead: { fontFamily: fontFamilies.medium, fontSize: textSizes.title, lineHeight: textLineHeights.title, textAlign: 'center' },
   row: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 40 },
   box: {
     width: 70,
@@ -116,9 +116,9 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     textAlign: 'center',
     fontFamily: fontFamilies.bold,
-    fontSize: 24
+    fontSize: textSizes.heading
   },
-  resend: { fontFamily: fontFamilies.medium, fontSize: 14, textAlign: 'center', marginTop: 32 },
-  resendLink: { fontFamily: fontFamilies.bold, fontSize: 16, textAlign: 'center', marginTop: 8 },
+  resend: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, textAlign: 'center', marginTop: 32 },
+  resendLink: { fontFamily: fontFamilies.bold, fontSize: textSizes.normal, textAlign: 'center', marginTop: 8 },
   footer: { paddingHorizontal: 24, paddingBottom: 12 }
 });

@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { StatusBadge } from '@/components/ui/StatusBadge';
@@ -53,7 +53,7 @@ export default function OrdersScreen() {
           const active = tab === key;
           return (
             <Pressable key={key} onPress={() => setTab(key)} style={styles.tabButton}>
-              <ThemedText style={{ fontFamily: active ? fontFamilies.bold : fontFamilies.medium, fontSize: 16, color: active ? colors.textPrimary : colors.textMuted }}>
+              <ThemedText style={{ fontFamily: active ? fontFamilies.bold : fontFamilies.medium, fontSize: textSizes.normal, color: active ? colors.textPrimary : colors.textMuted }}>
                 {key === 'ongoing' ? 'Ongoing' : 'Completed'}
               </ThemedText>
               <View style={[styles.tabUnderline, { backgroundColor: active ? colors.accent : 'transparent' }]} />
@@ -112,9 +112,9 @@ const styles = StyleSheet.create({
   listContent: { paddingHorizontal: 24, paddingBottom: 24, gap: 14 },
   card: { flexDirection: 'row', alignItems: 'center', gap: 14, borderRadius: 20, padding: 16 },
   cardIcon: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center' },
-  orderId: { fontFamily: fontFamilies.bold, fontSize: 15 },
-  orderMeta: { fontFamily: fontFamilies.medium, fontSize: 13, marginTop: 2 },
+  orderId: { fontFamily: fontFamilies.bold, fontSize: textSizes.normal },
+  orderMeta: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, marginTop: 2 },
   badgeRow: { flexDirection: 'row', gap: 8, marginTop: 8 },
   cardRight: { alignItems: 'flex-end', gap: 6 },
-  price: { fontFamily: fontFamilies.bold, fontSize: 15 }
+  price: { fontFamily: fontFamilies.bold, fontSize: textSizes.normal }
 });

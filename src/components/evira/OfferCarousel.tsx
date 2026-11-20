@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View, type LayoutChangeEvent, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { ProductSummaryDto } from '@shopsphere/api-client';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { ProductImage } from '@/components/ProductImage';
@@ -112,9 +112,9 @@ export function OfferCarousel({ products }: { products: ProductSummaryDto[] }) {
 const styles = StyleSheet.create({
   card: { height: CARD_HEIGHT, borderRadius: 20, flexDirection: 'row', overflow: 'hidden' },
   copy: { flex: 1, padding: 20, justifyContent: 'center', gap: 2 },
-  headline: { fontFamily: fontFamilies.bold, fontSize: 32, lineHeight: 38 },
-  kicker: { fontFamily: fontFamilies.bold, fontSize: 16, lineHeight: 21 },
-  sub: { fontFamily: fontFamilies.medium, fontSize: 13, lineHeight: 18, marginTop: 4 },
+  headline: { fontFamily: fontFamilies.bold, fontSize: textSizes.heading, lineHeight: textLineHeights.heading },
+  kicker: { fontFamily: fontFamilies.bold, fontSize: textSizes.normal, lineHeight: textLineHeights.normal },
+  sub: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, lineHeight: textLineHeights.description, marginTop: 4 },
   art: { width: '42%', height: '100%' },
   // Confined to the copy column (the art takes the right 42%) so the dots never
   // sit on top of a photo, where an inactive dot can vanish against dark pixels.

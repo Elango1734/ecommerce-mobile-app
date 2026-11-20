@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { EviraButton } from '@/components/evira';
@@ -45,7 +45,7 @@ function AccountRow({
       <ThemedText style={[styles.rowLabel, { color: colors.textPrimary }]}>{label}</ThemedText>
       {badge ? (
         <View style={[styles.badge, { backgroundColor: colors.accent }]}>
-          <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 11, color: colors.onAccent }}>{badge}</ThemedText>
+          <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.description, color: colors.onAccent }}>{badge}</ThemedText>
         </View>
       ) : null}
       <ChevronRightGlyph size={20} color={colors.textMuted} />
@@ -75,8 +75,14 @@ export default function AccountScreen() {
               Sign in to see your orders, wishlist, and checkout faster.
             </ThemedText>
             <View style={styles.guestActions}>
-              <EviraButton label="Sign in" onPress={() => navigation.navigate('Login')} style={styles.guestButton} />
-              <EviraButton label="Create account" variant="outline" onPress={() => navigation.navigate('Register')} style={styles.guestButton} />
+              <EviraButton label="Sign in" onPress={() => navigation.navigate('Login')} style={styles.guestButton} labelStyle={styles.guestButtonLabel} />
+              <EviraButton
+                label="Create account"
+                variant="outline"
+                onPress={() => navigation.navigate('Register')}
+                style={styles.guestButton}
+                labelStyle={styles.guestButtonLabel}
+              />
             </View>
           </View>
         ) : (
@@ -111,7 +117,7 @@ export default function AccountScreen() {
         {isAuthenticated ? (
           <Pressable accessibilityRole="button" onPress={() => logout.mutate()} style={styles.logout}>
             <LogOutGlyph size={20} color={colors.danger} />
-            <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 16, color: colors.danger }}>
+            <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.normal, color: colors.danger }}>
               {logout.isPending ? 'Logging out…' : 'Log out'}
             </ThemedText>
           </Pressable>
@@ -124,20 +130,21 @@ export default function AccountScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   content: { paddingHorizontal: 24, paddingTop: 8, paddingBottom: 32 },
-  title: { fontFamily: fontFamilies.bold, fontSize: 24, lineHeight: 29, marginBottom: 20 },
+  title: { fontFamily: fontFamilies.bold, fontSize: textSizes.heading, lineHeight: textLineHeights.heading, marginBottom: 20 },
   guestCard: { borderRadius: 20, padding: 20, marginBottom: 12 },
-  guestTitle: { fontFamily: fontFamilies.bold, fontSize: 18, marginBottom: 8 },
-  guestBody: { fontFamily: fontFamilies.medium, fontSize: 14, lineHeight: 20, marginBottom: 16 },
+  guestTitle: { fontFamily: fontFamilies.bold, fontSize: textSizes.title, marginBottom: 8 },
+  guestBody: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, lineHeight: textLineHeights.description, marginBottom: 16 },
   guestActions: { flexDirection: 'row', gap: 12 },
-  guestButton: { flex: 1, height: 50 },
+  guestButton: { flex: 1, height: 50, paddingHorizontal: 12 },
+  guestButtonLabel: { fontSize: textSizes.description, lineHeight: textLineHeights.description },
   profileRow: { flexDirection: 'row', alignItems: 'center', gap: 16, marginBottom: 12 },
   avatar: { width: 64, height: 64, borderRadius: 32, alignItems: 'center', justifyContent: 'center' },
-  name: { fontFamily: fontFamilies.bold, fontSize: 18 },
-  email: { fontFamily: fontFamilies.medium, fontSize: 14, marginTop: 2 },
+  name: { fontFamily: fontFamilies.bold, fontSize: textSizes.title },
+  email: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, marginTop: 2 },
   section: { marginTop: 12 },
   row: { flexDirection: 'row', alignItems: 'center', gap: 14, paddingVertical: 16, borderBottomWidth: 1 },
   rowIcon: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
-  rowLabel: { flex: 1, fontFamily: fontFamilies.semibold, fontSize: 16 },
-  badge: { borderRadius: 100, minWidth: 20, height: 20, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 5, marginRight: 4 },
+  rowLabel: { flex: 1, fontFamily: fontFamilies.semibold, fontSize: textSizes.normal },
+  badge: { borderRadius: 100, minWidth: 24, height: 22, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 6, marginRight: 4 },
   logout: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 28, paddingVertical: 12 }
 });

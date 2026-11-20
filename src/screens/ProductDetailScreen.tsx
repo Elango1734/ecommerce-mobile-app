@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { QuantityStepper } from '@/components/ui/QuantityStepper';
@@ -12,6 +12,7 @@ import { EviraButton } from '@/components/evira';
 import { ArrowLeftGlyph, HeartFilledGlyph, HeartGlyph, ShareGlyph, StarFilledGlyph } from '@/components/ui/icons';
 import { useProduct, useProductQuestions, useProductReviews } from '@/hooks/useCatalog';
 import { useAddToCart } from '@/hooks/useCart';
+import { track } from '@/analytics/track';
 import { useWishlistToggle } from '@/hooks/useDiscovery';
 import { useAiCompare, useRelatedProducts, useReviewSummary } from '@/hooks/useAi';
 import { formatMoney } from '@/utils/money';
@@ -33,6 +34,14 @@ export default function ProductDetailScreen() {
   const wishlist = useWishlistToggle();
   const addToCart = useAddToCart();
   const aiCompare = useAiCompare();
+
+  // One view per product, keyed on the ids themselves so re-renders do not
+  // inflate the count and the effect's deps stay exhaustive.
+  const viewedProductId = product?.id;
+  const viewedCategoryId = product?.categoryId;
+  useEffect(() => {
+    if (viewedProductId) track('product_view', { productId: viewedProductId, categoryId: viewedCategoryId });
+  }, [viewedProductId, viewedCategoryId]);
 
   const attributeNames = useMemo(() => (product ? getAttributeNames(product.variants) : []), [product]);
 
@@ -182,7 +191,7 @@ export default function ProductDetailScreen() {
                           }
                         ]}
                       >
-                        <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 14, color: isSelected ? colors.onAccent : colors.textPrimary }}>
+                        <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.description, color: isSelected ? colors.onAccent : colors.textPrimary }}>
                           {option}
                         </ThemedText>
                       </Pressable>
@@ -221,8 +230,8 @@ export default function ProductDetailScreen() {
               <ThemedText style={[styles.sectionTitle, { color: colors.textPrimary }]}>Specifications</ThemedText>
               {product.attributes.map((attr) => (
                 <View key={attr.name} style={styles.specRow}>
-                  <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 14, color: colors.textSecondary }}>{attr.name}</ThemedText>
-                  <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 14, color: colors.textPrimary }}>{attr.value}</ThemedText>
+                  <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, color: colors.textSecondary }}>{attr.name}</ThemedText>
+                  <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.description, color: colors.textPrimary }}>{attr.value}</ThemedText>
                 </View>
               ))}
             </View>
@@ -231,12 +240,12 @@ export default function ProductDetailScreen() {
           {product.returnPolicyRef || product.warrantyPolicyRef ? (
             <View style={[styles.policyCard, { backgroundColor: colors.surfaceSunken }]}>
               {product.returnPolicyRef ? (
-                <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 13, color: colors.textSecondary }}>
+                <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, color: colors.textSecondary }}>
                   Return policy: {product.returnPolicyRef}
                 </ThemedText>
               ) : null}
               {product.warrantyPolicyRef ? (
-                <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 13, color: colors.textSecondary }}>
+                <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, color: colors.textSecondary }}>
                   Warranty: {product.warrantyPolicyRef}
                 </ThemedText>
               ) : null}
@@ -259,12 +268,12 @@ export default function ProductDetailScreen() {
                 <View key={review.id} style={[styles.reviewRow, { borderBottomColor: colors.borderSubtle }]}>
                   <View style={styles.reviewHeader}>
                     <StarFilledGlyph size={14} color={colors.warning} />
-                    <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 14, color: colors.textPrimary }}>
+                    <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.description, color: colors.textPrimary }}>
                       {review.rating} {review.isVerifiedPurchase ? '· Verified purchase' : ''}
                     </ThemedText>
                   </View>
                   {review.title ? (
-                    <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 14, color: colors.textPrimary, marginTop: 4 }}>
+                    <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.description, color: colors.textPrimary, marginTop: 4 }}>
                       {review.title}
                     </ThemedText>
                   ) : null}
@@ -283,7 +292,7 @@ export default function ProductDetailScreen() {
             {questions.data && questions.data.data.length > 0 ? (
               questions.data.data.map((q) => (
                 <View key={q.id} style={{ marginBottom: 12 }}>
-                  <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 14, color: colors.textPrimary }}>Q: {q.body}</ThemedText>
+                  <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.description, color: colors.textPrimary }}>Q: {q.body}</ThemedText>
                   {q.answers.map((a) => (
                     <ThemedText key={a.id} style={[styles.body16, { color: colors.textSecondary }]}>
                       A: {a.body}
@@ -302,7 +311,7 @@ export default function ProductDetailScreen() {
               {relatedProducts.data.map((related) => (
                 <View key={related.id} style={[styles.relatedRow, { borderBottomColor: colors.borderSubtle }]}>
                   <Pressable style={{ flex: 1 }} onPress={() => navigation.navigate('ProductDetail', { slug: related.slug })}>
-                    <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 15, color: colors.textPrimary }}>
+                    <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.normal, color: colors.textPrimary }}>
                       {related.name}
                     </ThemedText>
                   </Pressable>
@@ -310,7 +319,7 @@ export default function ProductDetailScreen() {
                     onPress={() => runCompare(related.id)}
                     style={[styles.compareButton, { borderColor: colors.border }]}
                   >
-                    <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 13, color: colors.textPrimary }}>Compare</ThemedText>
+                    <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.description, color: colors.textPrimary }}>Compare</ThemedText>
                   </Pressable>
                 </View>
               ))}
@@ -344,7 +353,16 @@ export default function ProductDetailScreen() {
           loading={addToCart.isPending}
           onPress={() => {
             if (!selectedVariant) return;
-            addToCart.mutate({ variantId: selectedVariant.id, quantity }, { onSuccess: () => setAddedMessage('Added to cart') });
+            addToCart.mutate(
+              { variantId: selectedVariant.id, quantity },
+              {
+                onSuccess: () => {
+                  setAddedMessage('Added to cart');
+                  // Tracked on success only — a failed add is not a cart add.
+                  track('add_to_cart', { productId: product.id });
+                }
+              }
+            );
           }}
           style={styles.addToCartButton}
         />
@@ -362,23 +380,23 @@ const styles = StyleSheet.create({
   circleButton: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
   body: { paddingHorizontal: 24, paddingTop: 20 },
   titleRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
-  title: { fontFamily: fontFamilies.bold, fontSize: 22, lineHeight: 28 },
+  title: { fontFamily: fontFamilies.bold, fontSize: textSizes.heading, lineHeight: textLineHeights.heading },
   ratingPill: { flexDirection: 'row', alignItems: 'center', gap: 4, borderRadius: 100, paddingHorizontal: 10, paddingVertical: 6 },
-  ratingLabel: { fontFamily: fontFamilies.semibold, fontSize: 13 },
+  ratingLabel: { fontFamily: fontFamilies.semibold, fontSize: textSizes.description },
   priceRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 10 },
-  price: { fontFamily: fontFamilies.black, fontSize: 24, lineHeight: 29 },
-  priceStrike: { fontFamily: fontFamilies.medium, fontSize: 15, textDecorationLine: 'line-through' },
+  price: { fontFamily: fontFamilies.black, fontSize: textSizes.heading, lineHeight: textLineHeights.heading },
+  priceStrike: { fontFamily: fontFamilies.medium, fontSize: textSizes.normal, textDecorationLine: 'line-through' },
   section: { marginTop: 24 },
-  sectionLabel: { fontFamily: fontFamilies.bold, fontSize: 14, marginBottom: 10, textTransform: 'capitalize' },
-  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 22, marginBottom: 10 },
+  sectionLabel: { fontFamily: fontFamilies.bold, fontSize: textSizes.description, marginBottom: 10, textTransform: 'capitalize' },
+  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: textSizes.title, lineHeight: textLineHeights.title, marginBottom: 10 },
   pillRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   optionPill: { borderWidth: 1.5, borderRadius: 100, paddingHorizontal: 18, paddingVertical: 10 },
-  stock: { fontFamily: fontFamilies.semibold, fontSize: 14, marginTop: 16 },
-  body16: { fontFamily: fontFamilies.medium, fontSize: 15, lineHeight: 22 },
+  stock: { fontFamily: fontFamilies.semibold, fontSize: textSizes.description, marginTop: 16 },
+  body16: { fontFamily: fontFamilies.medium, fontSize: textSizes.normal, lineHeight: textLineHeights.normal },
   specRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8 },
   policyCard: { borderRadius: 16, padding: 16, marginTop: 20, gap: 4 },
   aiCard: { borderRadius: 16, padding: 16, marginTop: 20 },
-  aiLabel: { fontFamily: fontFamilies.bold, fontSize: 12, textTransform: 'uppercase', letterSpacing: 0.4, marginBottom: 6 },
+  aiLabel: { fontFamily: fontFamilies.bold, fontSize: textSizes.description, textTransform: 'uppercase', letterSpacing: 0.4, marginBottom: 6 },
   reviewRow: { borderBottomWidth: 1, paddingVertical: 14 },
   reviewHeader: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   relatedRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, paddingVertical: 14 },

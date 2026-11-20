@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { ProductSummaryDto } from '@shopsphere/api-client';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ProductImage } from '@/components/ProductImage';
 import { ThemedText } from '@/components/ui/Themed';
@@ -104,10 +104,10 @@ const styles = StyleSheet.create({
   imageFrame: { flex: 1, borderRadius: 10, overflow: 'hidden' },
   heart: { position: 'absolute', top: 10, right: 10, width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
   badge: { position: 'absolute', left: 10, bottom: 10, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 },
-  name: { fontFamily: fontFamilies.semibold, fontSize: 14, lineHeight: 20, marginTop: 10 },
+  name: { fontFamily: fontFamilies.semibold, fontSize: textSizes.description, lineHeight: textLineHeights.description, marginTop: 10 },
   ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: 6 },
-  ratingLabel: { fontFamily: fontFamilies.bold, fontSize: 13, lineHeight: 17 },
+  ratingLabel: { fontFamily: fontFamilies.bold, fontSize: textSizes.description, lineHeight: textLineHeights.description },
   reviewPill: { borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
-  reviewLabel: { fontFamily: fontFamilies.medium, fontSize: 11, lineHeight: 15 },
-  price: { fontFamily: fontFamilies.bold, fontSize: 16, lineHeight: 22, marginTop: 6 }
+  reviewLabel: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, lineHeight: textLineHeights.description },
+  price: { fontFamily: fontFamilies.bold, fontSize: textSizes.normal, lineHeight: textLineHeights.normal, marginTop: 6 }
 });

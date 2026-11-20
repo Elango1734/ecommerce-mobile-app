@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { StatusBadge } from '@/components/ui/StatusBadge';
@@ -83,7 +83,7 @@ export default function SupportScreen() {
               <MessageGlyph size={18} color={colors.textPrimary} />
             </View>
             <View style={{ flex: 1 }}>
-              <ThemedText numberOfLines={1} style={{ fontFamily: fontFamilies.bold, fontSize: 15, color: colors.textPrimary }}>
+              <ThemedText numberOfLines={1} style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.normal, color: colors.textPrimary }}>
                 {item.subject}
               </ThemedText>
               <View style={{ marginTop: 6 }}>
@@ -101,9 +101,9 @@ export default function SupportScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   listContent: { paddingHorizontal: 24, paddingBottom: 24, gap: 12 },
-  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: 18, marginBottom: 14 },
+  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: textSizes.title, marginBottom: 14 },
   newCard: { borderRadius: 20, padding: 20, marginBottom: 12 },
-  input: { borderRadius: 14, padding: 14, fontFamily: fontFamilies.medium, fontSize: 14, marginBottom: 12 },
+  input: { borderRadius: 14, padding: 14, fontFamily: fontFamilies.medium, fontSize: textSizes.description, marginBottom: 12 },
   textarea: { minHeight: 70, textAlignVertical: 'top' },
   submit: { height: 48 },
   ticketRow: { flexDirection: 'row', alignItems: 'center', gap: 14, borderRadius: 16, padding: 14 },

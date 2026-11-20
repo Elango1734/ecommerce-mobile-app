@@ -5,7 +5,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, type LoginInput } from '@shopsphere/validation';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { ControlledTextInput } from '@/components/ui/ControlledTextInput';
@@ -65,10 +65,10 @@ export default function LoginScreen() {
             <View style={[styles.checkbox, { borderColor: colors.accent, backgroundColor: remember ? colors.accent : 'transparent' }]}>
               {remember ? <CheckGlyph size={12} color={colors.onAccent} /> : null}
             </View>
-            <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 13, color: colors.textPrimary }}>Remember me</ThemedText>
+            <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.description, color: colors.textPrimary }}>Remember me</ThemedText>
           </Pressable>
           <Pressable onPress={() => navigation.navigate('ForgotPassword')}>
-            <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 13, color: colors.textPrimary }}>Forgot the password?</ThemedText>
+            <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.description, color: colors.textPrimary }}>Forgot the password?</ThemedText>
           </Pressable>
         </View>
 
@@ -85,9 +85,9 @@ export default function LoginScreen() {
         </View>
 
         <View style={styles.footer}>
-          <ThemedText style={{ fontFamily: fontFamilies.regular, fontSize: 14, color: colors.textSecondary }}>Don&rsquo;t have an account? </ThemedText>
+          <ThemedText style={{ fontFamily: fontFamilies.regular, fontSize: textSizes.description, color: colors.textSecondary }}>Don&rsquo;t have an account? </ThemedText>
           <Pressable onPress={() => navigation.replace('Register')}>
-            <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 14, color: colors.textPrimary }}>Sign up</ThemedText>
+            <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.description, color: colors.textPrimary }}>Sign up</ThemedText>
           </Pressable>
         </View>
       </ScrollView>
@@ -98,7 +98,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   content: { paddingHorizontal: 24, paddingTop: 8, paddingBottom: 32 },
-  title: { fontFamily: fontFamilies.black, fontSize: 34, lineHeight: 40, marginBottom: 28 },
+  title: { fontFamily: fontFamilies.black, fontSize: textSizes.heading, lineHeight: textLineHeights.heading, marginBottom: 28 },
   fields: { gap: 4 },
   optionsRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 },
   rememberRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },

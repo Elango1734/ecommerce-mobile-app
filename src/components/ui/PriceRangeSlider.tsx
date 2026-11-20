@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { PanResponder, StyleSheet, View } from 'react-native';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from './Themed';
 import { formatMoney } from '@/utils/money';
@@ -174,5 +174,5 @@ const styles = StyleSheet.create({
   track: { position: 'absolute', left: 0, right: 0, height: TRACK_HEIGHT, borderRadius: TRACK_HEIGHT / 2 },
   thumb: { position: 'absolute', width: THUMB, height: THUMB, borderRadius: THUMB / 2, borderWidth: 3 },
   labels: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 },
-  label: { fontFamily: fontFamilies.semibold, fontSize: 13, lineHeight: 17 }
+  label: { fontFamily: fontFamilies.semibold, fontSize: textSizes.description, lineHeight: textLineHeights.description }
 });

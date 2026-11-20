@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { EviraButton, EviraDivider, EviraHeader, EviraSocialButton, Illustration } from '@/components/evira';
 import { BagGlyph, GlobeGlyph, UserGlyph } from '@/components/ui/icons';
@@ -64,10 +64,10 @@ export default function LetsYouInScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   body: { flex: 1, paddingHorizontal: 24 },
-  title: { fontFamily: fontFamilies.black, fontSize: 40, lineHeight: 48, textAlign: 'center', marginTop: 32 },
+  title: { fontFamily: fontFamilies.black, fontSize: textSizes.heading, lineHeight: textLineHeights.heading, textAlign: 'center', marginTop: 32 },
   providers: { gap: 16, marginTop: 32 },
   cta: { marginTop: 24 },
   footer: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 24 },
-  footerText: { fontFamily: fontFamilies.regular, fontSize: 14 },
-  footerLink: { fontFamily: fontFamilies.bold, fontSize: 14 }
+  footerText: { fontFamily: fontFamilies.regular, fontSize: textSizes.description },
+  footerLink: { fontFamily: fontFamilies.bold, fontSize: textSizes.description }
 });

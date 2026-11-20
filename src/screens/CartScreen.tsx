@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Animated, FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { QuantityStepper } from '@/components/ui/QuantityStepper';
@@ -105,12 +105,12 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', gap: 16, marginBottom: 20 },
   thumb: { width: 88, height: 88, borderRadius: 16, overflow: 'hidden' },
   rowBody: { flex: 1, justifyContent: 'center' },
-  rowPrice: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 22 },
-  rowEach: { fontFamily: fontFamilies.medium, fontSize: 13, marginTop: 2 },
+  rowPrice: { fontFamily: fontFamilies.bold, fontSize: textSizes.title, lineHeight: textLineHeights.title },
+  rowEach: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, marginTop: 2 },
   rowFooter: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 },
   summary: { marginTop: 8 },
-  note: { fontFamily: fontFamilies.medium, fontSize: 13, lineHeight: 18, marginBottom: 16 },
+  note: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, lineHeight: textLineHeights.description, marginBottom: 16 },
   totalRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
-  totalLabel: { fontFamily: fontFamilies.semibold, fontSize: 16 },
-  totalValue: { fontFamily: fontFamilies.black, fontSize: 20 }
+  totalLabel: { fontFamily: fontFamilies.semibold, fontSize: textSizes.normal },
+  totalValue: { fontFamily: fontFamilies.black, fontSize: textSizes.heading }
 });

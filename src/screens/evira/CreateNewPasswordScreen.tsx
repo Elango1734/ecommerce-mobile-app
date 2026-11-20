@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { EviraButton, EviraField, EviraHeader, Illustration } from '@/components/evira';
 import { EviraSuccessDialog } from './EviraSuccessScreen';
@@ -94,10 +94,10 @@ export default function CreateNewPasswordScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   body: { flex: 1, paddingHorizontal: 24 },
-  lead: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 22, marginTop: 24 },
+  lead: { fontFamily: fontFamilies.bold, fontSize: textSizes.title, lineHeight: textLineHeights.title, marginTop: 24 },
   fields: { gap: 20, marginTop: 20 },
   remember: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 24 },
   checkbox: { width: 22, height: 22, borderRadius: 7, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
-  rememberLabel: { fontFamily: fontFamilies.semibold, fontSize: 14 },
+  rememberLabel: { fontFamily: fontFamilies.semibold, fontSize: textSizes.description },
   footer: { paddingHorizontal: 24, paddingBottom: 12 }
 });

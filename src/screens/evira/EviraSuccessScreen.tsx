@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, StyleSheet, Text, View } from 'react-native';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { EviraButton, Illustration } from '@/components/evira';
 
@@ -40,7 +40,7 @@ export function EviraSuccessDialog({
 const styles = StyleSheet.create({
   backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', alignItems: 'center', justifyContent: 'center', padding: 24 },
   card: { width: '100%', borderRadius: 40, alignItems: 'center', padding: 32 },
-  title: { fontFamily: fontFamilies.bold, fontSize: 24, lineHeight: 29, textAlign: 'center', marginTop: 24 },
-  message: { fontFamily: fontFamilies.medium, fontSize: 16, lineHeight: 22, textAlign: 'center', marginTop: 12 },
+  title: { fontFamily: fontFamilies.bold, fontSize: textSizes.heading, lineHeight: textLineHeights.heading, textAlign: 'center', marginTop: 24 },
+  message: { fontFamily: fontFamilies.medium, fontSize: textSizes.normal, lineHeight: textLineHeights.normal, textAlign: 'center', marginTop: 12 },
   cta: { alignSelf: 'stretch', marginTop: 28 }
 });

@@ -5,7 +5,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema, type RegisterInput } from '@shopsphere/validation';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { ControlledTextInput } from '@/components/ui/ControlledTextInput';
@@ -52,9 +52,9 @@ export default function RegisterScreen() {
         <EviraButton label="Create Account" loading={registerMutation.isPending} onPress={onSubmit} style={styles.cta} />
 
         <View style={styles.footer}>
-          <ThemedText style={{ fontFamily: fontFamilies.regular, fontSize: 14, color: colors.textSecondary }}>Already have an account? </ThemedText>
+          <ThemedText style={{ fontFamily: fontFamilies.regular, fontSize: textSizes.description, color: colors.textSecondary }}>Already have an account? </ThemedText>
           <Pressable onPress={() => navigation.replace('Login')}>
-            <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 14, color: colors.textPrimary }}>Sign in</ThemedText>
+            <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.description, color: colors.textPrimary }}>Sign in</ThemedText>
           </Pressable>
         </View>
       </ScrollView>
@@ -65,8 +65,8 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   content: { paddingHorizontal: 24, paddingTop: 8, paddingBottom: 32 },
-  title: { fontFamily: fontFamilies.black, fontSize: 34, lineHeight: 40, marginBottom: 8 },
-  subtitle: { fontFamily: fontFamilies.medium, fontSize: 14, lineHeight: 20, marginBottom: 28 },
+  title: { fontFamily: fontFamilies.black, fontSize: textSizes.heading, lineHeight: textLineHeights.heading, marginBottom: 8 },
+  subtitle: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, lineHeight: textLineHeights.description, marginBottom: 28 },
   fields: { gap: 4 },
   cta: { marginTop: 8 },
   footer: { flexDirection: 'row', justifyContent: 'center', marginTop: 24 }

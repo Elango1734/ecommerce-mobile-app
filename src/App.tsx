@@ -11,6 +11,7 @@ import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
 import { useAuthStore } from '@/stores/authStore';
 import { useGuestStore } from '@/stores/guestStore';
 import { RootNavigator } from '@/navigation/RootNavigator';
+import { startAnalyticsSession } from '@/analytics/track';
 
 function NavigationRoot() {
   const { resolvedScheme, colors } = useTheme();
@@ -59,6 +60,13 @@ export default function App() {
       .catch(() => undefined)
       .finally(() => setIsReady(true));
   }, []);
+
+  // Opened after hydration so the first event already carries the restored
+  // auth or guest identity, rather than arriving as an unattributed session.
+  useEffect(() => {
+    if (!isReady) return undefined;
+    return startAnalyticsSession();
+  }, [isReady]);
 
   if (!isReady) return null;
 

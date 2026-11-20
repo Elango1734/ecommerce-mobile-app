@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from './Themed';
 
@@ -51,8 +51,8 @@ export function ActionMenu({
               <ThemedText
                 style={{
                   fontFamily: fontFamilies.semibold,
-                  fontSize: 16,
-                  lineHeight: 21,
+                  fontSize: textSizes.normal,
+                  lineHeight: textLineHeights.normal,
                   opacity: item.disabled ? 0.4 : 1,
                   color: item.destructive ? colors.danger : colors.textPrimary
                 }}
@@ -71,6 +71,6 @@ const styles = StyleSheet.create({
   backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
   sheet: { borderTopLeftRadius: 32, borderTopRightRadius: 32, paddingHorizontal: 24, paddingTop: 12, paddingBottom: 32 },
   grabber: { alignSelf: 'center', width: 38, height: 4, borderRadius: 2, marginBottom: 12 },
-  title: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 23, paddingVertical: 8 },
+  title: { fontFamily: fontFamilies.bold, fontSize: textSizes.title, lineHeight: textLineHeights.title, paddingVertical: 8 },
   row: { paddingVertical: 18 }
 });

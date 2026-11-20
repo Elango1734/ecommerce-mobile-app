@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { EviraButton, EviraHeader, Illustration } from '@/components/evira';
 import { MailGlyph, PhoneGlyph } from '@/components/ui/icons';
@@ -76,11 +76,11 @@ export default function ForgotPasswordScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   body: { flex: 1, paddingHorizontal: 24 },
-  lead: { fontFamily: fontFamilies.medium, fontSize: 18, lineHeight: 25, textAlign: 'center', marginTop: 24 },
+  lead: { fontFamily: fontFamilies.medium, fontSize: textSizes.title, lineHeight: textLineHeights.title, textAlign: 'center', marginTop: 24 },
   options: { gap: 20, marginTop: 32 },
   option: { flexDirection: 'row', alignItems: 'center', gap: 20, borderWidth: 2, borderRadius: 16, padding: 16 },
   optionIcon: { width: 60, height: 60, borderRadius: 30, alignItems: 'center', justifyContent: 'center' },
-  optionLabel: { fontFamily: fontFamilies.medium, fontSize: 14, lineHeight: 20 },
-  optionValue: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 25 },
+  optionLabel: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, lineHeight: textLineHeights.description },
+  optionValue: { fontFamily: fontFamilies.bold, fontSize: textSizes.title, lineHeight: textLineHeights.title },
   footer: { paddingHorizontal: 24, paddingBottom: 12 }
 });

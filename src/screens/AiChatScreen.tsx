@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { EviraHeader } from '@/components/evira';
@@ -74,7 +74,7 @@ export default function AiChatScreen() {
       <EviraHeader title="Sphere AI" />
       {turns.length === 0 ? (
         <View style={styles.intro}>
-          <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 14, lineHeight: 20, color: colors.textSecondary, marginBottom: 20 }}>
+          <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, lineHeight: textLineHeights.description, color: colors.textSecondary, marginBottom: 20 }}>
             {isSupportMode
               ? `I can check the real status of order ${orderId?.slice(-8)}, or answer policy questions — I never invent an order status or policy detail.`
               : "I search ShopSphere's real catalog based on what you type — I never invent a price, product, or stock status."}
@@ -83,7 +83,7 @@ export default function AiChatScreen() {
             STARTER_PROMPTS.map((prompt) => (
               <Pressable key={prompt} onPress={() => send(prompt)} style={[styles.promptCard, { backgroundColor: colors.surfaceSunken }]}>
                 <SparklesGlyph size={18} color={colors.textPrimary} />
-                <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 15, color: colors.textPrimary }}>{prompt}</ThemedText>
+                <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.normal, color: colors.textPrimary }}>{prompt}</ThemedText>
               </Pressable>
             ))}
         </View>
@@ -94,13 +94,13 @@ export default function AiChatScreen() {
           contentContainerStyle={styles.listContent}
           renderItem={({ item }) => (
             <View style={[styles.bubble, item.role === 'user' ? styles.bubbleMine : styles.bubbleTheirs, { backgroundColor: item.role === 'user' ? colors.accent : colors.surfaceSunken }]}>
-              <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 15, color: item.role === 'user' ? colors.onAccent : colors.textPrimary }}>
+              <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.normal, color: item.role === 'user' ? colors.onAccent : colors.textPrimary }}>
                 {item.content}
               </ThemedText>
               {item.products?.map((product) => (
                 <Pressable key={product.id} onPress={() => navigation.navigate('ProductDetail', { slug: product.slug })} style={[styles.productChip, { backgroundColor: colors.surface }]}>
-                  <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 14, color: colors.textPrimary }}>{product.name}</ThemedText>
-                  <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 12, color: colors.textMuted, marginTop: 2 }}>
+                  <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.description, color: colors.textPrimary }}>{product.name}</ThemedText>
+                  <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, color: colors.textMuted, marginTop: 2 }}>
                     {product.priceRange ? formatMoney({ amountMinor: product.priceRange.minAmountMinor, currency: product.priceRange.currency }) : 'Price unavailable'}
                   </ThemedText>
                 </Pressable>
@@ -139,7 +139,7 @@ export default function AiChatScreen() {
           }}
           style={styles.deleteHistory}
         >
-          <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 13, color: colors.textMuted }}>Delete conversation history</ThemedText>
+          <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.description, color: colors.textMuted }}>Delete conversation history</ThemedText>
         </Pressable>
       ) : null}
     </SafeAreaView>
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   bubbleTheirs: { alignSelf: 'flex-start', borderBottomLeftRadius: 4 },
   productChip: { borderRadius: 12, padding: 10, marginTop: 8 },
   composer: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 24, paddingVertical: 12, borderTopWidth: 1 },
-  input: { flex: 1, height: 48, borderRadius: 100, paddingHorizontal: 20, fontFamily: fontFamilies.semibold, fontSize: 15 },
+  input: { flex: 1, height: 48, borderRadius: 100, paddingHorizontal: 20, fontFamily: fontFamilies.semibold, fontSize: textSizes.normal },
   sendButton: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center' },
   deleteHistory: { alignItems: 'center', paddingVertical: 10 }
 });

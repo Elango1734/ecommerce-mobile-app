@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { StatusBadge } from '@/components/ui/StatusBadge';
@@ -84,15 +85,15 @@ export default function OrderDetailScreen() {
 
   const row = (label: string, value: string, bold?: boolean) => (
     <View style={styles.costRow} key={label}>
-      <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 14, color: colors.textSecondary }}>{label}</ThemedText>
-      <ThemedText style={{ fontFamily: bold ? fontFamilies.bold : fontFamilies.semibold, fontSize: bold ? 16 : 14, color: colors.textPrimary }}>
+      <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, color: colors.textSecondary }}>{label}</ThemedText>
+      <ThemedText style={{ fontFamily: bold ? fontFamilies.bold : fontFamilies.semibold, fontSize: bold ? textSizes.normal : textSizes.description, color: colors.textPrimary }}>
         {value}
       </ThemedText>
     </View>
   );
 
   return (
-    <View style={[styles.root, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.root, { backgroundColor: colors.background }]} edges={['top', 'bottom']}>
       <EviraHeader title={`Order #${order.id.slice(-8).toUpperCase()}`} />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <ThemedText style={[styles.placed, { color: colors.textMuted }]}>Placed {new Date(order.placedAt).toLocaleDateString()}</ThemedText>
@@ -109,14 +110,14 @@ export default function OrderDetailScreen() {
             </View>
             {shipments.data.map((shipment) => (
               <View key={shipment.id} style={{ marginTop: 12 }}>
-                <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 14, color: colors.textPrimary }}>
+                <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.description, color: colors.textPrimary }}>
                   {shipment.carrier ?? 'Carrier TBD'} {shipment.trackingNumber ? `· ${shipment.trackingNumber}` : ''}
                 </ThemedText>
                 <View style={{ marginTop: 4 }}>
                   <StatusBadge status={shipment.status} />
                 </View>
                 {shipment.trackingEvents.map((event, i) => (
-                  <ThemedText key={i} style={{ fontFamily: fontFamilies.medium, fontSize: 12, color: colors.textMuted, marginTop: 6 }}>
+                  <ThemedText key={i} style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, color: colors.textMuted, marginTop: 6 }}>
                     {new Date(event.occurredAt).toLocaleString()} — {event.status.replace(/_/g, ' ')}
                   </ThemedText>
                 ))}
@@ -129,11 +130,11 @@ export default function OrderDetailScreen() {
           <ThemedText style={[styles.sectionTitle, { color: colors.textPrimary }]}>Items</ThemedText>
           {order.items.map((item, index) => (
             <View key={`${item.variantId}-${index}`} style={[styles.itemRow, { borderBottomColor: colors.borderSubtle, borderBottomWidth: index < order.items.length - 1 ? 1 : 0 }]}>
-              <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 15, color: colors.textPrimary }}>{item.name}</ThemedText>
-              <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 13, color: colors.textMuted, marginTop: 2 }}>
+              <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.normal, color: colors.textPrimary }}>{item.name}</ThemedText>
+              <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, color: colors.textMuted, marginTop: 2 }}>
                 {Object.entries(item.attributes).map(([k, v]) => `${k}: ${v}`).join(', ')} · Qty {item.quantity}
               </ThemedText>
-              <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 14, color: colors.textPrimary, marginTop: 4 }}>
+              <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.description, color: colors.textPrimary, marginTop: 4 }}>
                 {formatMoney(item.lineTotal)}
               </ThemedText>
               {order.fulfillmentStatus === 'delivered' ? (
@@ -141,7 +142,7 @@ export default function OrderDetailScreen() {
                   <ReviewForm orderId={order.id} orderItemVariantId={item.variantId} />
                 ) : (
                   <Pressable onPress={() => setReviewingVariantId(item.variantId)} style={{ marginTop: 8 }}>
-                    <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 14, color: colors.accent }}>Write a review</ThemedText>
+                    <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.description, color: colors.accent }}>Write a review</ThemedText>
                   </Pressable>
                 )
               ) : null}
@@ -159,8 +160,8 @@ export default function OrderDetailScreen() {
 
         <View style={styles.section}>
           <ThemedText style={[styles.sectionTitle, { color: colors.textPrimary }]}>Shipping address</ThemedText>
-          <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 15, color: colors.textPrimary }}>{order.shippingAddress.recipientName}</ThemedText>
-          <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 14, color: colors.textSecondary, marginTop: 2 }}>
+          <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.normal, color: colors.textPrimary }}>{order.shippingAddress.recipientName}</ThemedText>
+          <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, color: colors.textSecondary, marginTop: 2 }}>
             {order.shippingAddress.addressLine1}, {order.shippingAddress.locality} {order.shippingAddress.postalCode}, {order.shippingAddress.countryCode}
           </ThemedText>
         </View>
@@ -168,7 +169,7 @@ export default function OrderDetailScreen() {
         <View style={styles.section}>
           <ThemedText style={[styles.sectionTitle, { color: colors.textPrimary }]}>Status history</ThemedText>
           {order.statusHistory.map((entry, i) => (
-            <ThemedText key={i} style={{ fontFamily: fontFamilies.medium, fontSize: 13, color: colors.textMuted, marginBottom: 4 }}>
+            <ThemedText key={i} style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, color: colors.textMuted, marginBottom: 4 }}>
               {new Date(entry.changedAt).toLocaleString()} — {entry.track}: {entry.status.replace(/_/g, ' ')}
             </ThemedText>
           ))}
@@ -182,7 +183,7 @@ export default function OrderDetailScreen() {
               onPress={() => cancelOrder.mutate('Customer requested cancellation', { onError: (e) => setCancelError((e as Error).message) })}
               style={[styles.dangerButton, { borderColor: colors.danger }]}
             >
-              <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 16, color: colors.danger }}>
+              <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.normal, color: colors.danger }}>
                 {cancelOrder.isPending ? 'Cancelling…' : 'Cancel order'}
               </ThemedText>
             </Pressable>
@@ -193,23 +194,23 @@ export default function OrderDetailScreen() {
           <EviraButton label="Ask Sphere AI about this order" variant="outline" onPress={() => navigation.navigate('AiChat', { mode: 'support', orderId: order.id })} />
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
   content: { paddingHorizontal: 24, paddingBottom: 32 },
-  placed: { fontFamily: fontFamilies.medium, fontSize: 13, marginTop: 8 },
+  placed: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, marginTop: 8 },
   badgeRow: { flexDirection: 'row', gap: 8, marginTop: 8 },
   section: { marginTop: 24 },
-  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: 18, marginBottom: 12 },
+  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: textSizes.title, marginBottom: 12 },
   trackingHeader: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   itemRow: { paddingVertical: 12 },
   costRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
   totalDivider: { borderTopWidth: 1, marginTop: 8, paddingTop: 8 },
   starRow: { flexDirection: 'row', gap: 8, marginBottom: 10 },
-  reviewInput: { borderWidth: 1.5, borderRadius: 16, padding: 14, minHeight: 70, fontFamily: fontFamilies.medium, fontSize: 14, marginBottom: 10 },
+  reviewInput: { borderWidth: 1.5, borderRadius: 16, padding: 14, minHeight: 70, fontFamily: fontFamilies.medium, fontSize: textSizes.description, marginBottom: 10 },
   reviewSubmit: { height: 46 },
   dangerButton: { height: 56, borderRadius: 100, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center' }
 });

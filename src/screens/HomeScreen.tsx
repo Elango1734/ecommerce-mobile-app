@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FlatList, Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { LoadingState, ErrorState } from '@/components/ui/states';
@@ -214,20 +214,20 @@ const styles = StyleSheet.create({
   columnWrap: { justifyContent: 'space-between' },
   greetingRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 16 },
   avatar: { width: 52, height: 52, borderRadius: 26, alignItems: 'center', justifyContent: 'center' },
-  greeting: { fontFamily: fontFamilies.medium, fontSize: 14, lineHeight: 20 },
-  name: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 25 },
+  greeting: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, lineHeight: textLineHeights.description },
+  name: { fontFamily: fontFamilies.bold, fontSize: textSizes.title, lineHeight: textLineHeights.title },
   headerIcon: { width: 28, height: 28, alignItems: 'center', justifyContent: 'center', marginLeft: 12 },
   search: { flexDirection: 'row', alignItems: 'center', gap: 10, height: 56, borderRadius: 16, paddingHorizontal: 20, marginTop: 4 },
-  searchLabel: { fontFamily: fontFamilies.medium, fontSize: 16 },
+  searchLabel: { fontFamily: fontFamilies.medium, fontSize: textSizes.normal },
   section: { marginTop: 28 },
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: 20, lineHeight: 25 },
-  seeAll: { fontFamily: fontFamilies.semibold, fontSize: 14 },
+  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: textSizes.heading, lineHeight: textLineHeights.heading },
+  seeAll: { fontFamily: fontFamilies.semibold, fontSize: textSizes.description },
   categoryGrid: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 18, rowGap: 22 },
   categoryItem: { width: '25%', alignItems: 'center', gap: 8 },
   categoryIcon: { width: 62, height: 62, borderRadius: 31, alignItems: 'center', justifyContent: 'center' },
-  categoryLabel: { fontFamily: fontFamilies.semibold, fontSize: 12, textAlign: 'center' },
+  categoryLabel: { fontFamily: fontFamilies.semibold, fontSize: textSizes.description, textAlign: 'center' },
   chipScroll: { gap: 10, paddingTop: 16, paddingRight: 24 },
   chip: { height: 44, borderRadius: 100, borderWidth: 1.5, paddingHorizontal: 20, alignItems: 'center', justifyContent: 'center' },
-  chipLabel: { fontFamily: fontFamilies.bold, fontSize: 14 }
+  chipLabel: { fontFamily: fontFamilies.bold, fontSize: textSizes.description }
 });

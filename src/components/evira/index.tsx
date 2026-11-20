@@ -13,11 +13,12 @@ import {
   TextInput,
   View,
   type TextInputProps,
+  type TextStyle,
   type ViewStyle
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ArrowLeftGlyph } from '@/components/ui/icons';
 
@@ -98,7 +99,8 @@ export function EviraButton({
   variant = 'primary',
   disabled,
   loading,
-  style
+  style,
+  labelStyle
 }: {
   label: string;
   onPress?: () => void;
@@ -106,6 +108,8 @@ export function EviraButton({
   disabled?: boolean;
   loading?: boolean;
   style?: ViewStyle;
+  /** Per-call label overrides — e.g. a smaller size so a long label fits a narrow side-by-side button. */
+  labelStyle?: TextStyle;
 }) {
   const { colors } = useTheme();
   const bg =
@@ -131,7 +135,7 @@ export function EviraButton({
       {loading ? (
         <ActivityIndicator color={fg} />
       ) : (
-        <Text style={[styles.buttonLabel, { color: fg }]}>{label}</Text>
+        <Text style={[styles.buttonLabel, { color: fg }, labelStyle]}>{label}</Text>
       )}
     </Pressable>
   );
@@ -202,7 +206,7 @@ export function EviraDivider({ label }: { label: string }) {
 const styles = StyleSheet.create({
   header: { height: 48, flexDirection: 'row', alignItems: 'center', gap: 16, paddingHorizontal: 24 },
   iconButton: { width: 28, height: 28, alignItems: 'center', justifyContent: 'center' },
-  headerTitle: { flex: 1, fontFamily: fontFamilies.bold, fontSize: 24, lineHeight: 29 },
+  headerTitle: { flex: 1, fontFamily: fontFamilies.bold, fontSize: textSizes.heading, lineHeight: textLineHeights.heading },
   headerRight: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   button: {
     height: 58,
@@ -211,7 +215,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 24
   },
-  buttonLabel: { fontFamily: fontFamilies.bold, fontSize: 16, lineHeight: 22 },
+  buttonLabel: { fontFamily: fontFamilies.bold, fontSize: textSizes.normal, lineHeight: textLineHeights.normal },
   social: {
     height: 60,
     borderRadius: 16,
@@ -222,13 +226,13 @@ const styles = StyleSheet.create({
     gap: 12
   },
   socialIcon: { width: 24, height: 24, alignItems: 'center', justifyContent: 'center' },
-  socialLabel: { fontFamily: fontFamilies.semibold, fontSize: 16, lineHeight: 22 },
+  socialLabel: { fontFamily: fontFamilies.semibold, fontSize: textSizes.normal, lineHeight: textLineHeights.normal },
   field: { minHeight: 60, borderRadius: 16, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, gap: 12 },
   fieldIcon: { width: 24, alignItems: 'center', justifyContent: 'center' },
-  fieldInput: { flex: 1, fontFamily: fontFamilies.semibold, fontSize: 16, paddingVertical: 18 },
+  fieldInput: { flex: 1, fontFamily: fontFamilies.semibold, fontSize: textSizes.normal, paddingVertical: 18 },
   divider: { flexDirection: 'row', alignItems: 'center', gap: 16 },
   rule: { flex: 1, height: 1 },
-  dividerLabel: { fontFamily: fontFamilies.semibold, fontSize: 14 }
+  dividerLabel: { fontFamily: fontFamilies.semibold, fontSize: textSizes.description }
 });
 
 export { Illustration } from './Illustration';

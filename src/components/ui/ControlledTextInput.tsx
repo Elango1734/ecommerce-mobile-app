@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Pressable, TextInput, View } from 'react-native';
 import { useController, type Control, type FieldPath, type FieldValues } from 'react-hook-form';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from './Themed';
 import { EyeGlyph, EyeOffGlyph } from './icons';
@@ -65,7 +65,7 @@ export function ControlledTextInput<TFieldValues extends FieldValues>({
           keyboardType={keyboardType}
           autoCapitalize={autoCapitalize}
           accessibilityLabel={label}
-          style={{ flex: 1, fontFamily: fontFamilies.semibold, fontSize: 16, paddingVertical: 18, color: colors.textPrimary }}
+          style={{ flex: 1, fontFamily: fontFamilies.semibold, fontSize: textSizes.normal, paddingVertical: 18, color: colors.textPrimary }}
         />
         {secureTextEntry ? (
           <Pressable accessibilityRole="button" accessibilityLabel={hidden ? 'Show password' : 'Hide password'} hitSlop={10} onPress={() => setHidden((h) => !h)}>

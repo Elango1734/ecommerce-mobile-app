@@ -3,7 +3,7 @@ import { FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-nat
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NotificationDto } from '@shopsphere/api-client';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
@@ -168,8 +168,8 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, borderRadius: 16, padding: 12 },
   icon: { width: 42, height: 42, borderRadius: 21, alignItems: 'center', justifyContent: 'center' },
   copy: { flex: 1, gap: 3 },
-  title: { fontFamily: fontFamilies.bold, fontSize: 15, lineHeight: 20 },
-  body: { fontFamily: fontFamilies.medium, fontSize: 13, lineHeight: 18 },
-  time: { fontFamily: fontFamilies.medium, fontSize: 11, lineHeight: 15, marginTop: 2 },
+  title: { fontFamily: fontFamilies.bold, fontSize: textSizes.normal, lineHeight: textLineHeights.normal },
+  body: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, lineHeight: textLineHeights.description },
+  time: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, lineHeight: textLineHeights.description, marginTop: 2 },
   dot: { width: 8, height: 8, borderRadius: 4, marginTop: 6 }
 });

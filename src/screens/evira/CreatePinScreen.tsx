@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { EviraButton, EviraHeader } from '@/components/evira';
 import type { AppParamList } from '@/navigation/types';
@@ -89,11 +89,11 @@ export default function CreatePinScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   body: { flex: 1, paddingHorizontal: 24, alignItems: 'center' },
-  lead: { fontFamily: fontFamilies.medium, fontSize: 18, lineHeight: 25, textAlign: 'center', marginTop: 24 },
+  lead: { fontFamily: fontFamilies.medium, fontSize: textSizes.title, lineHeight: textLineHeights.title, textAlign: 'center', marginTop: 24 },
   dots: { flexDirection: 'row', gap: 24, marginTop: 48 },
   dot: { width: 20, height: 20, borderRadius: 10, borderWidth: 2 },
   pad: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 48, width: '100%' },
   key: { width: '33.33%', height: 72, alignItems: 'center', justifyContent: 'center', borderRadius: 16 },
-  keyLabel: { fontFamily: fontFamilies.semibold, fontSize: 32 },
+  keyLabel: { fontFamily: fontFamilies.semibold, fontSize: textSizes.heading },
   footer: { paddingHorizontal: 24, paddingBottom: 12 }
 });

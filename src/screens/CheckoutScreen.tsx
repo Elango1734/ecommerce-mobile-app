@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { LoadingState, ErrorState, EmptyState } from '@/components/ui/states';
@@ -13,6 +13,7 @@ import { useCart } from '@/hooks/useCart';
 import { useAddresses } from '@/hooks/useAddresses';
 import { useCheckout } from '@/hooks/useCheckout';
 import { formatMoney } from '@/utils/money';
+import { track } from '@/analytics/track';
 import { ApiClientError } from '@shopsphere/api-client';
 import type { AppParamList } from '@/navigation/types';
 
@@ -65,6 +66,7 @@ export default function CheckoutScreen() {
         ...(couponCode.trim() ? { couponCode: couponCode.trim() } : {}),
         simulate: 'success'
       });
+      track('order_placed');
       navigation.replace('OrderDetail', { id: result.orderId });
     } catch (error) {
       setSubmitError(error instanceof ApiClientError ? error.message : 'Unable to complete checkout. Please try again.');
@@ -88,8 +90,8 @@ export default function CheckoutScreen() {
                 <MapPinGlyph size={20} color={colors.textPrimary} />
               </View>
               <View style={{ flex: 1 }}>
-                <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 15, color: colors.textPrimary }}>{address.fields.recipientName}</ThemedText>
-                <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>
+                <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.normal, color: colors.textPrimary }}>{address.fields.recipientName}</ThemedText>
+                <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, color: colors.textSecondary, marginTop: 2 }}>
                   {address.fields.addressLine1}, {address.fields.locality} {address.fields.postalCode}, {address.fields.countryCode}
                 </ThemedText>
               </View>
@@ -99,7 +101,7 @@ export default function CheckoutScreen() {
         })}
         <Pressable onPress={() => navigation.navigate('AddAddress')} style={styles.addAddress}>
           <PlusGlyph size={18} color={colors.textPrimary} />
-          <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 15, color: colors.textPrimary }}>Add a new address</ThemedText>
+          <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.normal, color: colors.textPrimary }}>Add a new address</ThemedText>
         </Pressable>
 
         <ThemedText style={[styles.sectionTitle, { color: colors.textPrimary, marginTop: 28 }]}>Promo Code</ThemedText>
@@ -119,15 +121,15 @@ export default function CheckoutScreen() {
           <ThemedText style={[styles.sectionTitle, { color: colors.textPrimary }]}>Order Summary</ThemedText>
           {cart.data.items.map((item) => (
             <View key={item.variantId} style={styles.summaryRow}>
-              <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 14, color: colors.textSecondary }}>Qty {item.quantity}</ThemedText>
-              <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 14, color: colors.textPrimary }}>
+              <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, color: colors.textSecondary }}>Qty {item.quantity}</ThemedText>
+              <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.description, color: colors.textPrimary }}>
                 {formatMoney({ amountMinor: item.indicativeUnitPrice.amountMinor * item.quantity, currency: item.indicativeUnitPrice.currency })}
               </ThemedText>
             </View>
           ))}
           <View style={[styles.totalRow, { borderTopColor: colors.border }]}>
-            <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 16, color: colors.textPrimary }}>Estimated subtotal</ThemedText>
-            <ThemedText style={{ fontFamily: fontFamilies.black, fontSize: 18, color: colors.textPrimary }}>
+            <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.normal, color: colors.textPrimary }}>Estimated subtotal</ThemedText>
+            <ThemedText style={{ fontFamily: fontFamilies.black, fontSize: textSizes.title, color: colors.textPrimary }}>
               {formatMoney({ amountMinor: estimatedSubtotalMinor, currency: cart.data.currency })}
             </ThemedText>
           </View>
@@ -149,16 +151,16 @@ export default function CheckoutScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   content: { paddingHorizontal: 24, paddingTop: 8, paddingBottom: 24 },
-  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: 18, marginBottom: 14 },
+  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: textSizes.title, marginBottom: 14 },
   addressCard: { flexDirection: 'row', alignItems: 'center', gap: 14, borderRadius: 18, borderWidth: 2, padding: 16, marginBottom: 12 },
   addressIcon: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
   radio: { width: 22, height: 22, borderRadius: 11, borderWidth: 2 },
   addAddress: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 8 },
   promoField: { flexDirection: 'row', alignItems: 'center', gap: 12, height: 56, borderRadius: 16, paddingHorizontal: 20 },
-  promoInput: { flex: 1, fontFamily: fontFamilies.semibold, fontSize: 15 },
+  promoInput: { flex: 1, fontFamily: fontFamilies.semibold, fontSize: textSizes.normal },
   summaryCard: { borderRadius: 20, padding: 20, marginTop: 28 },
   summaryRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
   totalRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, paddingTop: 10, borderTopWidth: 1 },
-  note: { fontFamily: fontFamilies.medium, fontSize: 12, lineHeight: 17, marginTop: 10 },
+  note: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, lineHeight: textLineHeights.description, marginTop: 10 },
   footer: { paddingHorizontal: 24, paddingTop: 12, borderTopWidth: 1 }
 });

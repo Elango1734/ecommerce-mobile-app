@@ -3,7 +3,7 @@ import { FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-nat
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { PromotionDto } from '@shopsphere/api-client';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
@@ -168,9 +168,9 @@ const styles = StyleSheet.create({
   listContent: { paddingHorizontal: 24, paddingTop: 8, paddingBottom: 32, gap: 16 },
   card: { height: 150, borderRadius: 20, flexDirection: 'row', overflow: 'hidden' },
   copy: { flex: 1, padding: 20, justifyContent: 'center', gap: 2 },
-  headline: { fontFamily: fontFamilies.bold, fontSize: 30, lineHeight: 36 },
-  kicker: { fontFamily: fontFamilies.bold, fontSize: 15, lineHeight: 20 },
-  sub: { fontFamily: fontFamilies.medium, fontSize: 12, lineHeight: 17, marginTop: 2 },
-  meta: { fontFamily: fontFamilies.semibold, fontSize: 11, lineHeight: 15, marginTop: 6 },
+  headline: { fontFamily: fontFamilies.bold, fontSize: textSizes.heading, lineHeight: textLineHeights.heading },
+  kicker: { fontFamily: fontFamilies.bold, fontSize: textSizes.normal, lineHeight: textLineHeights.normal },
+  sub: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, lineHeight: textLineHeights.description, marginTop: 2 },
+  meta: { fontFamily: fontFamilies.semibold, fontSize: textSizes.description, lineHeight: textLineHeights.description, marginTop: 6 },
   art: { width: '38%', height: '100%' }
 });

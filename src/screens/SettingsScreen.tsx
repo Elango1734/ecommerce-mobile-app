@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme, type ThemePreference } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { LoadingState } from '@/components/ui/states';
@@ -38,7 +38,7 @@ export default function SettingsScreen() {
                 onPress={() => setPreference(option.value)}
                 style={[styles.themeChip, { backgroundColor: active ? colors.accent : colors.surfaceSunken }]}
               >
-                <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 14, color: active ? colors.onAccent : colors.textPrimary }}>
+                <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.description, color: active ? colors.onAccent : colors.textPrimary }}>
                   {option.label}
                 </ThemedText>
               </Pressable>
@@ -51,7 +51,7 @@ export default function SettingsScreen() {
             <View style={[styles.sectionHeader, { marginTop: 28 }]}>
               <ThemedText style={[styles.sectionTitle, { color: colors.textPrimary, marginBottom: 0 }]}>Notifications</ThemedText>
               <Pressable onPress={() => markAllRead.mutate()}>
-                <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 13, color: colors.accent }}>Mark all read</ThemedText>
+                <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.description, color: colors.accent }}>Mark all read</ThemedText>
               </Pressable>
             </View>
             {notifications.isLoading ? (
@@ -69,9 +69,9 @@ export default function SettingsScreen() {
                     {n.readAt ? <CheckGlyph size={18} color={colors.textMuted} /> : <BellGlyph size={18} color={colors.textPrimary} />}
                   </View>
                   <View style={{ flex: 1 }}>
-                    <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 15, color: colors.textPrimary }}>{n.title}</ThemedText>
+                    <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.normal, color: colors.textPrimary }}>{n.title}</ThemedText>
                     {n.body ? (
-                      <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>{n.body}</ThemedText>
+                      <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, color: colors.textSecondary, marginTop: 2 }}>{n.body}</ThemedText>
                     ) : null}
                   </View>
                 </Pressable>
@@ -81,7 +81,7 @@ export default function SettingsScreen() {
         ) : null}
 
         <ThemedText style={[styles.sectionTitle, { color: colors.textPrimary, marginTop: 28 }]}>Privacy</ThemedText>
-        <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 14, lineHeight: 20, color: colors.textSecondary }}>
+        <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, lineHeight: textLineHeights.description, color: colors.textSecondary }}>
           Sphere AI conversation history can be deleted from within any chat screen. For account data export or deletion requests, contact
           support — self-service account deletion is not available in this build.
         </ThemedText>
@@ -93,7 +93,7 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   content: { paddingHorizontal: 24, paddingBottom: 32 },
-  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: 18, marginBottom: 14 },
+  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: textSizes.title, marginBottom: 14 },
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   themeRow: { flexDirection: 'row', gap: 10 },
   themeChip: { flex: 1, height: 46, borderRadius: 100, alignItems: 'center', justifyContent: 'center' },

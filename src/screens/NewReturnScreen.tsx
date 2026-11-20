@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { QuantityStepper } from '@/components/ui/QuantityStepper';
@@ -67,8 +67,8 @@ export default function NewReturnScreen() {
                   {isSelected ? <CheckGlyph size={14} color={colors.onAccent} /> : null}
                 </View>
                 <View style={{ flex: 1 }}>
-                  <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 15, color: colors.textPrimary }}>{item.name}</ThemedText>
-                  <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 13, color: colors.textMuted, marginTop: 2 }}>
+                  <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.normal, color: colors.textPrimary }}>{item.name}</ThemedText>
+                  <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, color: colors.textMuted, marginTop: 2 }}>
                     Purchased qty {item.quantity}
                   </ThemedText>
                 </View>
@@ -112,10 +112,10 @@ export default function NewReturnScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   content: { paddingHorizontal: 24, paddingBottom: 24 },
-  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: 18, marginBottom: 14 },
+  sectionTitle: { fontFamily: fontFamilies.bold, fontSize: textSizes.title, marginBottom: 14 },
   card: { borderRadius: 18, borderWidth: 2, padding: 16, marginBottom: 12 },
   cardTop: { flexDirection: 'row', alignItems: 'center', gap: 14 },
   checkbox: { width: 22, height: 22, borderRadius: 7, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
   stepperRow: { marginTop: 12, alignItems: 'flex-end' },
-  textarea: { borderRadius: 16, padding: 16, minHeight: 80, textAlignVertical: 'top', fontFamily: fontFamilies.medium, fontSize: 14, marginBottom: 20 }
+  textarea: { borderRadius: 16, padding: 16, minHeight: 80, textAlignVertical: 'top', fontFamily: fontFamilies.medium, fontSize: textSizes.description, marginBottom: 20 }
 });

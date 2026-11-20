@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { EviraButton, EviraHeader, Illustration } from '@/components/evira';
 import { EviraSuccessDialog } from './EviraSuccessScreen';
@@ -50,9 +50,9 @@ export default function SetFingerprintScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   body: { flex: 1, paddingHorizontal: 24, alignItems: 'center' },
-  lead: { fontFamily: fontFamilies.medium, fontSize: 18, lineHeight: 25, textAlign: 'center', marginTop: 24 },
+  lead: { fontFamily: fontFamilies.medium, fontSize: textSizes.title, lineHeight: textLineHeights.title, textAlign: 'center', marginTop: 24 },
   art: { alignItems: 'center', marginTop: 40 },
-  hint: { fontFamily: fontFamilies.medium, fontSize: 16, lineHeight: 22, textAlign: 'center', marginTop: 40 },
+  hint: { fontFamily: fontFamilies.medium, fontSize: textSizes.normal, lineHeight: textLineHeights.normal, textAlign: 'center', marginTop: 40 },
   footer: { flexDirection: 'row', gap: 16, paddingHorizontal: 24, paddingBottom: 12 },
   half: { flex: 1 }
 });

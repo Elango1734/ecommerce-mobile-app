@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text as RNText, View as RNView, type TextProps, type ViewProps } from 'react-native';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 
 export type TextVariant = 'display' | 'title' | 'heading' | 'body' | 'bodySmall' | 'caption' | 'label';
@@ -11,18 +11,34 @@ interface ThemedTextProps extends TextProps {
   weight?: 'regular' | 'medium' | 'semibold' | 'bold';
 }
 
+/**
+ * The seven legacy variants collapsed onto the four-role scale in
+ * `@shopsphere/config` — `display`/`heading` both land on `heading`, and
+ * `caption` joins `bodySmall`/`label` on `description`, because the scale
+ * deliberately has four sizes and not seven.
+ */
 const VARIANT_SIZES: Record<TextVariant, number> = {
-  display: 34,
-  title: 28,
-  heading: 20,
-  body: 16,
-  bodySmall: 14,
-  caption: 12,
-  label: 14
+  display: textSizes.heading,
+  title: textSizes.title,
+  heading: textSizes.heading,
+  body: textSizes.normal,
+  bodySmall: textSizes.description,
+  caption: textSizes.description,
+  label: textSizes.description
+};
+
+const VARIANT_LINE_HEIGHTS: Record<TextVariant, number> = {
+  display: textLineHeights.heading,
+  title: textLineHeights.title,
+  heading: textLineHeights.heading,
+  body: textLineHeights.normal,
+  bodySmall: textLineHeights.description,
+  caption: textLineHeights.description,
+  label: textLineHeights.description
 };
 
 export function ThemedText({ variant = 'body', color = 'primary', weight, style, ...props }: ThemedTextProps) {
-  const { colors, typography } = useTheme();
+  const { colors } = useTheme();
   const colorMap = {
     primary: colors.textPrimary,
     secondary: colors.textSecondary,
@@ -46,7 +62,7 @@ export function ThemedText({ variant = 'body', color = 'primary', weight, style,
           // selected by PostScript name; setting fontWeight as well would
           // make iOS synthesise a second, heavier weight on top.
           fontFamily: fontFamilies[weight ?? defaultWeight],
-          lineHeight: VARIANT_SIZES[variant] * typography.lineHeight.normal
+          lineHeight: VARIANT_LINE_HEIGHTS[variant]
         },
         style
       ]}

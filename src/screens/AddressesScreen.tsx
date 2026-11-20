@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
@@ -42,14 +42,14 @@ export default function AddressesScreen() {
             </View>
             <View style={{ flex: 1 }}>
               <View style={styles.nameRow}>
-                <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 15, color: colors.textPrimary }}>{item.fields.recipientName}</ThemedText>
+                <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.normal, color: colors.textPrimary }}>{item.fields.recipientName}</ThemedText>
                 {item.isDefault ? (
                   <View style={[styles.defaultPill, { backgroundColor: colors.accent }]}>
-                    <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: 11, color: colors.onAccent }}>Default</ThemedText>
+                    <ThemedText style={{ fontFamily: fontFamilies.bold, fontSize: textSizes.description, color: colors.onAccent }}>Default</ThemedText>
                   </View>
                 ) : null}
               </View>
-              <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: 13, color: colors.textSecondary, marginTop: 4 }}>
+              <ThemedText style={{ fontFamily: fontFamilies.medium, fontSize: textSizes.description, color: colors.textSecondary, marginTop: 4 }}>
                 {item.fields.addressLine1}
                 {item.fields.addressLine2 ? `, ${item.fields.addressLine2}` : ''}, {item.fields.locality} {item.fields.postalCode}, {item.fields.countryCode}
               </ThemedText>

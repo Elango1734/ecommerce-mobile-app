@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Dimensions, FlatList, Pressable, StyleSheet, Text, View, type ViewToken } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { EviraButton, Illustration } from '@/components/evira';
 import type { IllustrationName } from '@/components/evira/Illustration';
@@ -90,9 +90,9 @@ export default function WalkthroughScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   skipRow: { alignItems: 'flex-end', paddingHorizontal: 24, height: 48, justifyContent: 'center' },
-  skip: { fontFamily: fontFamilies.bold, fontSize: 16 },
+  skip: { fontFamily: fontFamilies.bold, fontSize: textSizes.normal },
   slide: { alignItems: 'center', paddingHorizontal: 24, paddingTop: 24 },
-  title: { fontFamily: fontFamilies.bold, fontSize: 32, lineHeight: 42, textAlign: 'center', marginTop: 48 },
+  title: { fontFamily: fontFamilies.bold, fontSize: textSizes.heading, lineHeight: textLineHeights.heading, textAlign: 'center', marginTop: 48 },
   dots: { flexDirection: 'row', justifyContent: 'center', gap: 8, paddingVertical: 24 },
   dot: { height: 8, borderRadius: 4 },
   footer: { paddingHorizontal: 24, paddingBottom: 12 }

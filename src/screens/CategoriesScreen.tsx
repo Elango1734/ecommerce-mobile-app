@@ -3,7 +3,7 @@ import { FlatList, Modal, Pressable, ScrollView, StyleSheet, View } from 'react-
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { ProductSummaryDto } from '@shopsphere/api-client';
-import { fontFamilies } from '@shopsphere/config';
+import { fontFamilies, textSizes, textLineHeights } from '@shopsphere/config';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemedText } from '@/components/ui/Themed';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/states';
@@ -43,7 +43,8 @@ type PriceBand = { label: string; minPriceMinor?: number; maxPriceMinor?: number
 
 /** One page is enough to facet the whole catalog at this size; MAX_PAGE_SIZE is 100 server-side. */
 const FACET_PAGE_SIZE = 100;
-const RAIL_WIDTH = 92;
+/** Sized to fit the longest category name at `textSizes.description` without the label spilling out of the rail. */
+const RAIL_WIDTH = 104;
 const PANE_PADDING = 14;
 const TILE_GAP = 10;
 
@@ -72,8 +73,8 @@ function Chip({
       <ThemedText
         style={{
           fontFamily: fontFamilies.semibold,
-          fontSize: 12,
-          lineHeight: 16,
+          fontSize: textSizes.description,
+          lineHeight: textLineHeights.description,
           color: active ? colors.onAccent : colors.textSecondary
         }}
       >
@@ -421,7 +422,7 @@ export default function CategoriesScreen() {
                       onPress={() => setPage((p) => p - 1)}
                       style={styles.pagerButton}
                     />
-                    <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 13, color: colors.textSecondary }}>
+                    <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.description, color: colors.textSecondary }}>
                       {page} / {totalPages}
                     </ThemedText>
                     <EviraButton
@@ -455,7 +456,7 @@ export default function CategoriesScreen() {
                   }}
                   style={styles.sortRow}
                 >
-                  <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: 16, color: colors.textPrimary }}>
+                  <ThemedText style={{ fontFamily: fontFamilies.semibold, fontSize: textSizes.normal, color: colors.textPrimary }}>
                     {option.label}
                   </ThemedText>
                   {active ? <CheckGlyph size={20} color={colors.accent} /> : null}
@@ -473,7 +474,7 @@ export default function CategoriesScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   header: { height: 52, flexDirection: 'row', alignItems: 'center', gap: 16, paddingHorizontal: 20 },
-  headerTitle: { flex: 1, fontFamily: fontFamilies.bold, fontSize: 22, lineHeight: 28 },
+  headerTitle: { flex: 1, fontFamily: fontFamilies.bold, fontSize: textSizes.heading, lineHeight: textLineHeights.heading },
   iconButton: { width: 28, height: 28, alignItems: 'center', justifyContent: 'center' },
   body: { flex: 1, flexDirection: 'row' },
 
@@ -484,13 +485,13 @@ const styles = StyleSheet.create({
   railItem: { paddingVertical: 14, alignItems: 'center', gap: 6 },
   railMarker: { position: 'absolute', left: 0, top: 10, bottom: 10, width: 3, borderRadius: 2 },
   railIcon: { width: 46, height: 46, borderRadius: 23, alignItems: 'center', justifyContent: 'center' },
-  railLabel: { fontSize: 11, lineHeight: 14, textAlign: 'center', paddingHorizontal: 6 },
+  railLabel: { fontSize: textSizes.description, lineHeight: textLineHeights.description, textAlign: 'center', paddingHorizontal: 6, alignSelf: 'stretch' },
 
   pane: { flex: 1 },
   paneContent: { paddingHorizontal: PANE_PADDING, paddingBottom: 24 },
   banner: { height: 104, borderRadius: 16, flexDirection: 'row', overflow: 'hidden', marginTop: 4 },
   bannerCopy: { flex: 1, padding: 14, justifyContent: 'center', gap: 10 },
-  bannerTitle: { fontFamily: fontFamilies.bold, fontSize: 18, lineHeight: 23 },
+  bannerTitle: { fontFamily: fontFamilies.bold, fontSize: textSizes.title, lineHeight: textLineHeights.title },
   bannerPill: { width: 34, height: 26, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
   bannerArt: { width: '46%', height: '100%' },
 
@@ -498,21 +499,21 @@ const styles = StyleSheet.create({
   chip: { flexDirection: 'row', alignItems: 'center', gap: 5, height: 30, borderRadius: 100, borderWidth: 1, paddingHorizontal: 12 },
 
   sectionHeader: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginTop: 20, marginBottom: 12 },
-  sectionTitle: { flex: 1, fontFamily: fontFamilies.bold, fontSize: 17, lineHeight: 22 },
-  sectionCount: { fontFamily: fontFamilies.medium, fontSize: 12, lineHeight: 16 },
+  sectionTitle: { flex: 1, fontFamily: fontFamilies.bold, fontSize: textSizes.title, lineHeight: textLineHeights.title },
+  sectionCount: { fontFamily: fontFamilies.medium, fontSize: textSizes.description, lineHeight: textLineHeights.description },
 
   tileRow: { gap: TILE_GAP, marginBottom: 16 },
   tile: { gap: 6 },
   tileArt: { borderRadius: 14, overflow: 'hidden' },
   tileArtInset: { ...StyleSheet.absoluteFillObject, padding: 7 },
-  tileLabel: { fontFamily: fontFamilies.semibold, fontSize: 11, lineHeight: 14, textAlign: 'center' },
-  tilePrice: { fontFamily: fontFamilies.bold, fontSize: 11, lineHeight: 14, textAlign: 'center' },
+  tileLabel: { fontFamily: fontFamilies.semibold, fontSize: textSizes.description, lineHeight: textLineHeights.description, textAlign: 'center' },
+  tilePrice: { fontFamily: fontFamilies.bold, fontSize: textSizes.description, lineHeight: textLineHeights.description, textAlign: 'center' },
 
   pager: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 12, paddingVertical: 16 },
   pagerButton: { height: 40, paddingHorizontal: 12 },
 
   backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
   sheet: { borderTopLeftRadius: 32, borderTopRightRadius: 32, padding: 24, paddingBottom: 40 },
-  sheetTitle: { fontFamily: fontFamilies.bold, fontSize: 20, marginBottom: 16 },
+  sheetTitle: { fontFamily: fontFamilies.bold, fontSize: textSizes.heading, marginBottom: 16 },
   sortRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 16 }
 });
