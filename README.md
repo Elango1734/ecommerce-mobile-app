@@ -1,7 +1,5 @@
 # ShopSphere AI — Mobile
 
-[![CI](https://github.com/Elango1734/ecommerce-mobile-app/actions/workflows/ci.yml/badge.svg)](https://github.com/Elango1734/ecommerce-mobile-app/actions/workflows/ci.yml)
-
 The customer-facing app for [ShopSphere AI](https://github.com/Elango1734/shopsphere-ai): catalog discovery, cart, checkout, orders, reviews, support, and the Sphere AI shopping assistant. Built with **bare React Native CLI** and TypeScript, talking to the Express/MongoDB API through the shared `@shopsphere/api-client` — never to the database directly.
 
 | Home | Categories | Product detail |
@@ -30,6 +28,8 @@ The customer-facing app for [ShopSphere AI](https://github.com/Elango1734/shopsp
 - The backend running locally — see the [API repository](https://github.com/Elango1734/shopsphere-ai). The app points at `http://localhost:4000/api/v1` (`src/config/appConfig.ts`), which works from the iOS Simulator; a physical device needs your machine's LAN IP.
 
 ## Setup
+
+> **This app is a workspace of the [ShopSphere AI monorepo](https://github.com/Elango1734/shopsphere-ai).** It depends on four `@shopsphere/*` packages that live there and are not published to npm, so `npm install` inside a standalone clone of this repository will fail. Clone the monorepo and work from `apps/mobile`, or read the source here.
 
 ```bash
 npm install
