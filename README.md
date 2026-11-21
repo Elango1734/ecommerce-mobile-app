@@ -1,5 +1,7 @@
 # ShopSphere AI — Mobile
 
+[![CI](https://github.com/Elango1734/ecommerce-mobile-app/actions/workflows/ci.yml/badge.svg)](https://github.com/Elango1734/ecommerce-mobile-app/actions/workflows/ci.yml)
+
 The customer-facing app for [ShopSphere AI](https://github.com/Elango1734/shopsphere-ai): catalog discovery, cart, checkout, orders, reviews, support, and the Sphere AI shopping assistant. Built with **bare React Native CLI** and TypeScript, talking to the Express/MongoDB API through the shared `@shopsphere/api-client` — never to the database directly.
 
 | Home | Categories | Product detail |

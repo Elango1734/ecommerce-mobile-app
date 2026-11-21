@@ -182,9 +182,15 @@ function CustomTabBar({ state, navigation }: BottomTabBarProps) {
   );
 }
 
+/**
+ * Hoisted out of TabNavigator: an inline arrow here is a new component type on
+ * every render, which makes React remount the whole tab bar and lose its state.
+ */
+const renderTabBar = (props: BottomTabBarProps) => <CustomTabBar {...props} />;
+
 export function TabNavigator() {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }} tabBar={(props) => <CustomTabBar {...props} />}>
+    <Tab.Navigator screenOptions={{ headerShown: false }} tabBar={renderTabBar}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Categories" component={CategoriesScreen} />
       <Tab.Screen name="Cart" component={CartScreen} />
