@@ -69,3 +69,7 @@ Three deliberate workarounds live in this project, each documented where it appl
 ## Status
 
 Release builds currently use the debug signing config — the React Native template default. Generate a real keystore before distributing anything (`android/app/build.gradle`). Payment and AI provider integrations run against development simulators rather than live credentials; see the [main repository](https://github.com/Elango1734/shopsphere-ai) for the full status breakdown.
+
+## Using this code
+
+This repository is public so the code can be read and evaluated. It is **not** open source: all rights are reserved, and no permission is granted to reuse any part of it without written consent. See [LICENSE](LICENSE).
